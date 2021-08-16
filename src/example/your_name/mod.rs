@@ -1,4 +1,5 @@
 // クイズの答えを実装する
+#[allow(dead_code)]
 fn main() {
     unimplemented!()
 }
