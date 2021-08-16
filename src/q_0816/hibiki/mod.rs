@@ -1,18 +1,19 @@
-use std::io::Write;
+#![allow(dead_code)]
+use std::io::{self, Write};
 
-#[allow(dead_code)]
-fn hello(w: &mut dyn Write) {
-  writeln!(w, "Hello World");
+fn main<W: Write>(w: &mut W) -> io::Result<()> {
+  writeln!(w, "Hello, World!")
 }
 
 #[cfg(test)]
 mod tests {
-  use super::hello;
+  use super::main;
 
   #[test]
-  fn test_hello() {
+  fn test_hello_world() {
       let mut buf = vec![];
-      hello(&mut buf);
-      assert_eq!(buf, b"Hello World\n");
+      let result = main(&mut buf);
+      assert!(result.is_ok());
+      assert_eq!(buf, b"Hello, World!\n");
   }
 }
