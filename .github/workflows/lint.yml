@@ -1,0 +1,30 @@
+name: Run lint
+
+on:
+  [pull_request, synchronize]
+
+jobs:
+  lint:
+    strategy:
+      matrix:
+        rust:
+          - stable
+        os: [ubuntu-latest]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout HEAD
+      - uses: actions/checkout@v1
+      
+      - name: setup Rust
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          components: clippy
+          override: true
+      - run: rustup component add clippy
+      
+      - name: run linter
+      - uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all-features -- -D warnings
