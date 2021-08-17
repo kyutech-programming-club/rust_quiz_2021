@@ -1,1 +1,1 @@
-pub mod sagoj0_;
+mod sagoj0_;
