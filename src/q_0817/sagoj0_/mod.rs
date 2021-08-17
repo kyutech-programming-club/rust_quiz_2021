@@ -15,7 +15,6 @@ fn input_plus1<T: Read>(input: &mut T) -> Result<isize> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_util::type_of;
 
     #[test]
     fn 正_読み込んだ値に1足した数値が返る() {
@@ -42,6 +41,7 @@ mod tests {
     #[test]
     #[allow(non_snake_case)]
     fn 誤_パースに失敗した際はParseIntErrorを返す() {
+        use matches::assert_matches;
         use std::num::ParseIntError;
 
         let input = "aa".to_owned();
@@ -53,10 +53,6 @@ mod tests {
         let error = result.unwrap_err();
 
         // errorの種類を検証
-        if let Some(parse_err) = error.root_cause().downcast_ref::<ParseIntError>() {
-            assert_eq!("&core::num::error::ParseIntError", type_of(parse_err));
-        } else {
-            panic!("test shoud not reach here");
-        }
+        assert_matches!(error.root_cause().downcast_ref::<ParseIntError>(), Some(_));
     }
 }
