@@ -1,7 +1,6 @@
 #![allow(dead_code)]
 fn main(input: i32) -> i32 {
-    let input = input + 1;
-    input
+    input + 1
 }
 
 #[cfg(test)]
