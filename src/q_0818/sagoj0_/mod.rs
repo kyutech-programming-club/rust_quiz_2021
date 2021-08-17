@@ -16,12 +16,16 @@ fn main<R: Read, W: Write>(src: &mut R, dst: &mut W) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rstest::rstest;
 
-    #[test]
-    fn 正_偶数の際に0が出力される() {
-        let expected = "0\n".as_bytes();
+    #[rstest]
+    #[case("42", "0\n")]
+    #[case("-8", "0\n")]
+    #[case("0", "0\n")]
+    fn 正_偶数の際に0が出力される(#[case] input: &str, #[case] expected: &str) {
+        let expected = expected.as_bytes();
 
-        let mut stdin_mock = "42".as_bytes();
+        let mut stdin_mock = input.as_bytes();
         let mut stdout_mock = vec![];
 
         let result = main(&mut stdin_mock, &mut stdout_mock);
@@ -30,50 +34,13 @@ mod tests {
         assert_eq!(stdout_mock, expected);
     }
 
-    #[test]
-    fn 正_奇数の際に1が出力される() {
-        let expected = "1\n".as_bytes();
+    #[rstest]
+    #[case("3", "1\n")]
+    #[case("-5", "1\n")]
+    fn 正_奇数の際に1が出力される(#[case] input: &str, #[case] expected: &str) {
+        let expected = expected.as_bytes();
 
-        let mut stdin_mock = "243".as_bytes();
-        let mut stdout_mock = vec![];
-
-        let result = main(&mut stdin_mock, &mut stdout_mock);
-
-        assert!(result.is_ok());
-        assert_eq!(stdout_mock, expected);
-    }
-
-    #[test]
-    fn 正_負の偶数の際に0が出力される() {
-        let expected = "0\n".as_bytes();
-
-        let mut stdin_mock = "-8".as_bytes();
-        let mut stdout_mock = vec![];
-
-        let result = main(&mut stdin_mock, &mut stdout_mock);
-
-        assert!(result.is_ok());
-        assert_eq!(stdout_mock, expected);
-    }
-
-    #[test]
-    fn 正_負の奇数の際に1が出力される() {
-        let expected = "1\n".as_bytes();
-
-        let mut stdin_mock = "-5".as_bytes();
-        let mut stdout_mock = vec![];
-
-        let result = main(&mut stdin_mock, &mut stdout_mock);
-
-        assert!(result.is_ok());
-        assert_eq!(stdout_mock, expected);
-    }
-
-    #[test]
-    fn 正_0の際に0が出力される() {
-        let expected = "0\n".as_bytes();
-
-        let mut stdin_mock = "0".as_bytes();
+        let mut stdin_mock = input.as_bytes();
         let mut stdout_mock = vec![];
 
         let result = main(&mut stdin_mock, &mut stdout_mock);
