@@ -19,8 +19,8 @@ mod tests {
 
     #[test]
     fn 正_読み込んだ値に1足した数値が返る() {
-        let stdin_mock = "42".to_owned();
-        let mut stdin_mock = stdin_mock.as_bytes();
+        let input = "42".to_owned();
+        let mut stdin_mock = input.as_bytes();
 
         let result = input_plus1(&mut stdin_mock);
 
@@ -30,8 +30,8 @@ mod tests {
 
     #[test]
     fn 誤_入力足す1以外の値は返らない() {
-        let stdin_mock = "42".to_owned();
-        let mut stdin_mock = stdin_mock.as_bytes();
+        let input = "42".to_owned();
+        let mut stdin_mock = input.as_bytes();
 
         let result = input_plus1(&mut stdin_mock);
 
@@ -44,8 +44,8 @@ mod tests {
     fn 誤_パースに失敗した際はParseIntErrorを返す() {
         use std::num::ParseIntError;
 
-        let stdin_mock = "aa".to_owned();
-        let mut stdin_mock = stdin_mock.as_bytes();
+        let input = "aa".to_owned();
+        let mut stdin_mock = input.as_bytes();
 
         let result = input_plus1(&mut stdin_mock);
 
