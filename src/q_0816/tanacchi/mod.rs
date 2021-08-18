@@ -27,7 +27,7 @@ mod tests {
     fn should_write_hello_world() {
         use io::Cursor;
         let mut buff = Cursor::new(vec![0; STRING.len()]);
-        main(&mut buff).unwrap();
+        assert!(main(&mut buff).is_ok());
         assert_eq!(&buff.get_ref()[..], STRING.as_bytes())
     }
 }
