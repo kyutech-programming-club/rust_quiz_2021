@@ -14,6 +14,7 @@ mod tests {
     use std::io::{self, Write};
 
     #[test]
+    #[ignore]
     fn should_write_stdout() {
         let stdout = io::stdout();
         let mut handle = stdout.lock();
