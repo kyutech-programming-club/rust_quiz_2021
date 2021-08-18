@@ -104,10 +104,12 @@ mod tests {
         assert_eq!(error.to_string().as_str(), "Invalid number of input")
     }
 
-    #[test]
+    #[rstest]
+    #[case("1 0")]
+    #[case("0 0")]
     #[allow(non_snake_case)]
-    fn 誤_二つ目の入力が0ならエラーを返す() {
-        let mut stdin_mock = "1 0".as_bytes();
+    fn 誤_二つ目の入力が0ならエラーを返す(#[case] input: &str) {
+        let mut stdin_mock = input.as_bytes();
         let mut stdout_mock = vec![];
 
         let result = main(&mut stdin_mock, &mut stdout_mock);
