@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use anyhow::{anyhow, Result};
+use anyhow::{bail, Result};
 use std::io::{Read, Write};
 
 fn parse(iter: &mut std::str::SplitWhitespace) -> Result<isize> {
@@ -8,7 +8,7 @@ fn parse(iter: &mut std::str::SplitWhitespace) -> Result<isize> {
         Ok(s.parse::<isize>()?)
     } else {
         eprintln!("数値が足りません");
-        Err(anyhow!("Invalid number of input"))
+        bail!("Invalid number of input")
     }
 }
 
@@ -20,6 +20,10 @@ fn main<R: Read, W: Write>(src: &mut R, dst: &mut W) -> Result<()> {
 
     let x = parse(&mut iter)?;
     let y = parse(&mut iter)?;
+
+    if y == 0 {
+        bail!("the second number must not be 0");
+    }
 
     writeln!(dst, "{}", if x % y == 0 { "Y" } else { "N" })?;
     Ok(())
@@ -98,5 +102,21 @@ mod tests {
 
         // errorの種類を検証
         assert_eq!(error.to_string().as_str(), "Invalid number of input")
+    }
+
+    #[test]
+    #[allow(non_snake_case)]
+    fn 誤_二つ目の入力が0ならエラーを返す() {
+        let mut stdin_mock = "1 0".as_bytes();
+        let mut stdout_mock = vec![];
+
+        let result = main(&mut stdin_mock, &mut stdout_mock);
+
+        assert!(result.is_err());
+        let error = result.unwrap_err();
+        assert_eq!(
+            error.to_string().as_str(),
+            "the second number must not be 0"
+        )
     }
 }
