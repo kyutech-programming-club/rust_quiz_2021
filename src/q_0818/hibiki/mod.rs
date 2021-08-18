@@ -9,11 +9,11 @@ fn input_num<T: Read>(input: &mut T) -> Result<isize> {
 
   let num = buf.parse::<isize>()?;
 
-  let mut count = 0;
+  
   if num % 2 == 0 {
-    count = 0
+    Ok(0)
   } else {
-    count = 1
+    Ok(1)
   }
 
 
