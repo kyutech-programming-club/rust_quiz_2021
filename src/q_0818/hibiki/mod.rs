@@ -35,7 +35,7 @@ mod tests {
   }
   #[test]
   fn test_odd() {
-    let input = "42".to_owned();
+    let input = "41".to_owned();
     let mut stdin_mock = input.as_bytes();
 
     let result = input_num(&mut stdin_mock);
