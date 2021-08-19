@@ -1,22 +1,22 @@
-use std::io::{self, Read, Write};
+use std::io::{Read, Write};
+use anyhow::Result;
 
 #[allow(dead_code)]
-fn main(read_buf: &mut impl Read, write_buf: &mut impl Write) -> io::Result<()> {
+fn main(read_buf: &mut impl Read, write_buf: &mut impl Write) -> Result<()> {
     // Read from buf.
     let mut s = String::new();
     read_buf.read_to_string(&mut s)?;
     // Parse into i32 and Add 1.
     let n = s.trim()
              .parse::<i32>()
-             .map(|n| n + 1)
-             .map_err(|_| io::ErrorKind::InvalidInput)?;
+             .map(|n| n + 1)?;
     // Write to buf.
-    write_buf.write_all(n.to_string().as_bytes())
+    Ok(write_buf.write_all(n.to_string().as_bytes())?)
 }
 
 #[cfg(test)]
 mod tests {
-    use super::main;
+    use super::*;
     use std::io;
 
     #[test]
