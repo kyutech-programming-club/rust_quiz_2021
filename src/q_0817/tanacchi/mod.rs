@@ -1,7 +1,7 @@
 use std::io::{self, BufRead, Write};
 
 #[allow(dead_code)]
-fn main<R: BufRead, W: Write>(read_buf: &mut R, write_buf: &mut W) -> io::Result<()> {
+fn main(read_buf: &mut impl BufRead, write_buf: &mut impl Write) -> io::Result<()> {
     // Read from buf.
     let mut s = String::new();
     read_buf.read_line(&mut s)?;
