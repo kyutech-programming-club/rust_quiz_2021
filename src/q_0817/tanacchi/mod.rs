@@ -1,10 +1,10 @@
-use std::io::{self, BufRead, Write};
+use std::io::{self, Read, Write};
 
 #[allow(dead_code)]
-fn main(read_buf: &mut impl BufRead, write_buf: &mut impl Write) -> io::Result<()> {
+fn main(read_buf: &mut impl Read, write_buf: &mut impl Write) -> io::Result<()> {
     // Read from buf.
     let mut s = String::new();
-    read_buf.read_line(&mut s)?;
+    read_buf.read_to_string(&mut s)?;
     // Parse into i32 and Add 1.
     let n = s.trim()
              .parse::<i32>()
