@@ -1,17 +1,15 @@
-use std::io::{Read, Write};
+use std::io::Read;
 use anyhow::Result;
 
 #[allow(dead_code)]
-fn main(read_buf: &mut impl Read, write_buf: &mut impl Write) -> Result<()> {
+fn main(read_buf: &mut impl Read) -> Result<i32> {
     // Read from buf.
     let mut s = String::new();
     read_buf.read_to_string(&mut s)?;
-    // Parse into i32 and Add 1.
-    let n = s.trim()
-             .parse::<i32>()
-             .map(|n| n + 1)?;
-    // Write to buf.
-    Ok(write_buf.write_all(n.to_string().as_bytes())?)
+    // Parse into i32.
+    let n = s.trim().parse::<i32>()?;
+    // Add one.
+    Ok(n + 1)
 }
 
 #[cfg(test)]
