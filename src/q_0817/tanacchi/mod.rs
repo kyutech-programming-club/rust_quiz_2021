@@ -14,17 +14,38 @@ fn main(read_buf: &mut impl Read) -> Result<i32> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use std::io;
+    use super::main;
+    use rstest::rstest;
 
-    #[test]
-    fn can_use_stdio() {
-        let stdin = io::stdin();
-        let mut read_buf = stdin.lock();
-        let stdout = io::stdout();
-        let mut write_buf = stdout.lock();
+    #[rstest]
+    #[case("42", 43)]
+    #[case("-1", 0)]
+    #[case("-100", -99)]
+    fn should_parse_int_and_add_one(#[case] input: &str, #[case] expected: i32) {
+        let input = input.to_owned();
+        let mut read_buf = input.as_bytes();
 
-        let result = main(&mut read_buf, &mut write_buf);
-        assert!(result.is_ok() || result.is_err());
+        let result = main(&mut read_buf);
+
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), expected);
+    }
+
+    #[rstest]
+    #[case("ahi")]
+    #[case("-0.1")]
+    #[case("0xff")]
+    fn should_raise_error_for_invalid_input(#[case] input: &str) {
+        use matches::assert_matches;
+        use std::num::ParseIntError;
+
+        let input = input.to_owned();
+        let mut read_buf = input.as_bytes();
+
+        let result = main(&mut read_buf);
+        assert!(result.is_err());
+
+        let error = result.unwrap_err();
+        assert_matches!(error.root_cause().downcast_ref::<ParseIntError>(), Some(_));
     }
 }
