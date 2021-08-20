@@ -6,7 +6,7 @@ fn input_num<Input: Read, Output: Write>(input: &mut Input, output: &mut Output)
   let mut buf = String::new();
   input.read_to_string(&mut buf)?;
 
-  let v: Vec<&str> = buf.split(' ').collect();
+  let v: Vec<&str> = buf.split(&['-', ' ', ':', '@'][..]).collect();
   let first = v[0].parse::<isize>()?;
   let second = v[1].parse::<isize>()?;
 
