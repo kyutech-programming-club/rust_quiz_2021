@@ -1,12 +1,13 @@
+use std::io::{Read, Write};
 use anyhow::Result;
 
 #[allow(dead_code)]
-fn main() -> Result<i32> {
+fn main(read_buf: &mut impl Read, write_buf: &mut impl Write) -> Result<()> {
     let mut s = String::new();
-    std::io::stdin().read_line(&mut s)?;
+    read_buf.read_to_string(&mut s)?;
     let n = s.trim().parse::<i32>()?.rem_euclid(2);
-    println!("{}", n);
-    Ok(n)
+    writeln!(write_buf, "{}", n)?;
+    Ok(())
 }
 
 #[cfg(test)]
