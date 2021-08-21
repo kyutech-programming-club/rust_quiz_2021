@@ -6,6 +6,8 @@ use crate::utils::sagoj0_::io_util;
 
 fn logic(input: &str) -> Result<f64> {
     let r = input.parse::<f64>()?;
+
+    #[allow(clippy::approx_constant)]
     let pi: f64 = 3.14;
 
     let volume = 4.0 / 3.0 * pi * r * r * r;
