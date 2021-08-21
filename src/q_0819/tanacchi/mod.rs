@@ -1,4 +1,4 @@
-use anyhow::{bail, Result};
+use anyhow::{ensure, bail, Result};
 use std::io::{Read, Write};
 use std::string::String;
 
@@ -21,9 +21,7 @@ fn main(src: &mut impl Read, dst: &mut impl Write) -> Result<()> {
     let x = parse(&mut input)?;
     let y = parse(&mut input)?;
 
-    if y == 0 {
-        bail!("The second number must not be 0.");
-    }
+    ensure!(y != 0, "The second number must not be 0.");
     writeln!(dst, "{}", if x % y == 0 { "Y" } else { "N" })?;
     Ok(())
 }
