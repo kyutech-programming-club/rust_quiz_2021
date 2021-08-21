@@ -9,7 +9,7 @@ fn logic(input: &str) -> Result<f64> {
     let r = input.parse::<f64>()?;
 
     ensure!(r >= 0 as f64, "0以上を入力してください");
-    let answer = 3. * PI * r * r * r / 4.;
+    let answer = 4. * PI * r * r * r / 3.;
     Ok(answer)
 }
 
@@ -27,7 +27,7 @@ mod tests {
     use rstest::rstest;
 
     fn volume(r: f64) -> f64 {
-        3. * PI * r * r * r / 4.
+        4. * PI * r * r * r / 3.
     }
 
     #[rstest]

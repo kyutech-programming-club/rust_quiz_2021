@@ -1,7 +1,8 @@
 #![allow(dead_code)]
 
 use crate::utils::sagoj0_::io_util;
-use anyhow::{bail, ensure, Result};
+use crate::utils::sagoj0_::parse_util;
+use anyhow::{ensure, Result};
 use std::io;
 
 fn main() -> Result<()> {
@@ -15,8 +16,8 @@ fn main() -> Result<()> {
 fn logic(input: &str) -> Result<String> {
     let mut iter = input.split_whitespace();
 
-    let height = parse(&mut iter)?;
-    let width = parse(&mut iter)?;
+    let height: f64 = parse_util::parse(&mut iter)?;
+    let width: f64 = parse_util::parse(&mut iter)?;
 
     ensure!(height > 0., "the height value must be greater than zero");
 
@@ -25,15 +26,6 @@ fn logic(input: &str) -> Result<String> {
         bmi if bmi < 25. => "普通".to_owned(),
         _ => "肥満".to_owned(),
     })
-}
-
-fn parse(iter: &mut std::str::SplitWhitespace) -> Result<f64> {
-    if let Some(s) = iter.next() {
-        Ok(s.parse::<f64>()?)
-    } else {
-        eprintln!("数値が足りません");
-        bail!("Invalid number of input")
-    }
 }
 
 #[cfg(test)]
@@ -79,7 +71,7 @@ mod tests {
         let error = result.unwrap_err();
 
         // errorの種類を検証
-        assert_eq!(error.to_string().as_str(), "Invalid number of input")
+        assert_eq!(error.to_string().as_str(), "no input error")
     }
 
     #[rstest]
