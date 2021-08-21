@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-use anyhow::{Result, anyhow};
+use anyhow::{anyhow, Result};
 use std::io::{Read, Write};
 
 fn main<Input: Read, Output: Write>(input: &mut Input, output: &mut Output) -> Result<()> {
@@ -24,28 +24,38 @@ fn main<Input: Read, Output: Write>(input: &mut Input, output: &mut Output) -> R
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rstest::rstest;
 
-    #[test]
-    fn test_judge_divisible() {
-        let input = "10 2".to_owned();
+    #[rstest]
+    #[case("4 2", "Y\n")]
+    #[case("100 1", "Y\n")]
+    #[case("57 3", "Y\n")]
+    #[case("-4 -2", "Y\n")]
+    #[case("0 1", "Y\n")]
+    fn test_judge_divisible(#[case] input: &str, #[case] expected: &str) {
+        let expected = expected.as_bytes();
+
         let mut stdin_mock = input.as_bytes();
-
         let mut stdout_mock = vec![];
+
         let result = main(&mut stdin_mock, &mut stdout_mock);
 
         assert!(result.is_ok());
-        assert_eq!(stdout_mock, b"Y\n");
+        assert_eq!(stdout_mock, expected);
     }
 
-    #[test]
-    fn test_judge_non_divisible() {
-        let input = "3 2".to_owned();
-        let mut stdin_mock = input.as_bytes();
+    #[rstest]
+    #[case("1 3", "N\n")]
+    #[case("-5 4", "N\n")]
+    fn test_judge_non_divisible(#[case] input: &str, #[case] expected: &str) {
+        let expected = expected.as_bytes();
 
+        let mut stdin_mock = input.as_bytes();
         let mut stdout_mock = vec![];
+
         let result = main(&mut stdin_mock, &mut stdout_mock);
 
         assert!(result.is_ok());
-        assert_eq!(stdout_mock, b"N\n");
+        assert_eq!(stdout_mock, expected);
     }
 }
