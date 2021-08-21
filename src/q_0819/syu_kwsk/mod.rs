@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-use anyhow::Result;
+use anyhow::{Result, anyhow};
 use std::io::{Read, Write};
 
 fn main<Input: Read, Output: Write>(input: &mut Input, output: &mut Output) -> Result<()> {
@@ -7,8 +7,15 @@ fn main<Input: Read, Output: Write>(input: &mut Input, output: &mut Output) -> R
     input.read_to_string(&mut buf)?;
 
     let v: Vec<&str> = buf.split(' ').collect();
-    let first = v[0].parse::<isize>()?;
-    let second = v[1].parse::<isize>()?;
+
+    let first = match v.get(0) {
+        Some(x) => x.parse::<isize>()?,
+        None => return Err(anyhow!("Index out of range")),
+    };
+    let second = match v.get(1) {
+        Some(x) => x.parse::<isize>()?,
+        None => return Err(anyhow!("Index out of range")),
+    };
 
     writeln!(output, "{}", if first % second == 0 { "Y" } else { "N" })?;
     Ok(())
