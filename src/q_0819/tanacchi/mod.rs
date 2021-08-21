@@ -66,4 +66,43 @@ mod test {
         assert!(result.is_ok());
         assert_eq!(stdout_mock, expected);
     }
+
+    #[test]
+    fn raise_error_when_input_cannot_be_parsed() {
+        use matches::assert_matches;
+        use std::num::ParseIntError;
+
+        let mut stdin_mock = "ahiahi".as_bytes();
+        let mut stdout_mock = vec![];
+
+        let result = main(&mut stdin_mock, &mut stdout_mock);
+        assert!(result.is_err());
+
+        let err = result.unwrap_err();
+        assert_matches!(err.root_cause().downcast_ref::<ParseIntError>(), Some(_));
+    }
+
+    #[test]
+    fn raise_error_when_number_of_input_is_less_than_2() {
+        let mut stdin_mock = "1 ".as_bytes();
+        let mut stdout_mock = vec![];
+
+        let result = main(&mut stdin_mock, &mut stdout_mock);
+        assert!(result.is_err());
+
+        let err = result.unwrap_err();
+        assert_eq!(err.to_string().as_str(), "Invalid number of input.");
+    }
+
+    #[test]
+    fn raise_error_when_the_second_input_is_0() {
+        let mut stdin_mock = "10 0".as_bytes();
+        let mut stdout_mock = vec![];
+
+        let result = main(&mut stdin_mock, &mut stdout_mock);
+        assert!(result.is_err());
+
+        let err = result.unwrap_err();
+        assert_eq!(err.to_string().as_str(), "The second number must not be 0.");
+    }
 }
