@@ -19,3 +19,28 @@ fn main() -> Result<()> {
     io_util::io_handler(&mut stdin, &mut stdout, logic)?;
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rstest::rstest;
+
+    #[rstest]
+    #[case("4", "267.94666666666666")]
+    #[case("1", "4.1866666666666665")]
+    fn test_correct_volume(#[case] input: &str, #[case] expected: &str) {
+        let result = logic(input);
+
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap().to_string(), expected);
+    }
+
+    #[rstest]
+    #[case("1", "1")]
+    fn test_wrong_volume(#[case] input: &str, #[case] expected: &str) {
+        let result = logic(input);
+
+        assert!(result.is_ok());
+        assert_ne!(result.unwrap().to_string(), expected);
+    }
+}
