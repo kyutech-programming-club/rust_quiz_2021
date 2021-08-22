@@ -1,12 +1,18 @@
-use std::fmt;
-use std::fmt::Debug;
+//! rust_quizの実装で用いるエラーを定義する.
+//! enumの列挙子は適宜追加する.
+
+use std::fmt::{self, Debug};
 use thiserror::Error;
 
 #[derive(Debug, Error, PartialEq)]
 pub enum QuizSolveError {
+    /// 入力が足りない際のエラー
     #[error("no input error")]
     LackOfInputOnParseError,
-    #[error("Invalid input of {value:?}: {err_msg}")]
+
+    /// 任意の値vに対しQuizSolveError::invalid_input_error(v, "hogehoge")で
+    /// 不正な入力値の際のエラーを生成する
+    #[error("Invalid input of `{value:?}`: {err_msg}")]
     InvalidInputError {
         value: QuizSolveErrorValue,
         err_msg: String,
@@ -26,11 +32,11 @@ impl QuizSolveError {
 }
 
 pub struct QuizSolveErrorValue {
-    pub value: Box<dyn Debug + Send + Sync>,
+    value: Box<dyn Debug + Send + Sync>,
 }
 
 impl QuizSolveErrorValue {
-    pub fn new<T>(value: T) -> Self
+    fn new<T>(value: T) -> Self
     where
         T: Debug + Send + Sync + 'static,
     {
