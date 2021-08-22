@@ -13,8 +13,31 @@ pub enum QuizSolveError {
     },
 }
 
+impl QuizSolveError {
+    pub fn invalid_input_error<T>(value: T, err_msg: &str) -> Self
+    where
+        T: Debug + Send + Sync + 'static,
+    {
+        Self::InvalidInputError {
+            value: QuizSolveErrorValue::new(value),
+            err_msg: err_msg.to_owned(),
+        }
+    }
+}
+
 pub struct QuizSolveErrorValue {
     pub value: Box<dyn Debug + Send + Sync>,
+}
+
+impl QuizSolveErrorValue {
+    pub fn new<T>(value: T) -> Self
+    where
+        T: Debug + Send + Sync + 'static,
+    {
+        Self {
+            value: Box::new(value),
+        }
+    }
 }
 
 impl Debug for QuizSolveErrorValue {

@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use crate::utils::sagoj0_::error::{QuizSolveError::*, QuizSolveErrorValue};
+use crate::utils::sagoj0_::error::QuizSolveError;
 use crate::utils::sagoj0_::{io_util, parse_util};
 use anyhow::{ensure, Result};
 use std::io;
@@ -21,12 +21,10 @@ fn logic(input: &str) -> Result<isize> {
 
     ensure!(
         num1 < num2,
-        InvalidInputError {
-            value: QuizSolveErrorValue {
-                value: Box::new(num2)
-            },
-            err_msg: "the second argument must be greater than the first.".to_owned()
-        }
+        QuizSolveError::invalid_input_error(
+            num2,
+            "the second argument must be greater than the first."
+        )
     );
 
     Ok((num1..=num2).sum())
@@ -93,12 +91,10 @@ mod tests {
         let error = error.downcast::<QuizSolveError>().unwrap();
         assert_eq!(
             error,
-            QuizSolveError::InvalidInputError {
-                value: QuizSolveErrorValue {
-                    value: Box::new(num2)
-                },
-                err_msg: "the second argument must be greater than the first.".to_owned()
-            }
+            QuizSolveError::invalid_input_error(
+                num2,
+                "the second argument must be greater than the first."
+            )
         );
     }
 }
