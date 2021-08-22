@@ -1,7 +1,9 @@
 name: doc
 
 on:
-  commit:
+  push:
+    branches: [ master ]
+  pull_request:
     branches: [ master ]
 
 env:
@@ -10,6 +12,7 @@ env:
 jobs:
   doc:
     runs-on: ubuntu-latest
+    if:  github.event_name == 'push' || github.event.pull_request.merged == true
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
