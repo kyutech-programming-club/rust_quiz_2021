@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["rust_quiz_2021"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.54.0/std/error/trait.Error.html\" title=\"trait std::error::Error\">Error</a> for <a class=\"enum\" href=\"rust_quiz_2021/utils/sagoj0_/error/enum.QuizSolveError.html\" title=\"enum rust_quiz_2021::utils::sagoj0_::error::QuizSolveError\">QuizSolveError</a>","synthetic":false,"types":["rust_quiz_2021::utils::sagoj0_::error::QuizSolveError"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
