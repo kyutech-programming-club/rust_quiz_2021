@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+use crate::utils::sagoj0_::error::{QuizSolveError::*, QuizSolveErrorValue};
 use crate::utils::sagoj0_::{io_util, parse_util};
 use anyhow::{ensure, Result};
 use std::io;
@@ -18,7 +19,15 @@ fn logic(input: &str) -> Result<isize> {
     let num1: isize = parse_util::parse(&mut iter)?;
     let num2: isize = parse_util::parse(&mut iter)?;
 
-    ensure!(num1 < num2, "Invalid input");
+    ensure!(
+        num1 < num2,
+        InvalidInputError {
+            value: QuizSolveErrorValue {
+                value: Box::new(num2)
+            },
+            err_msg: "the second argument must be greater than the first.".to_owned()
+        }
+    );
 
     Ok((num1..=num2).sum())
 }
@@ -26,6 +35,7 @@ fn logic(input: &str) -> Result<isize> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::utils::sagoj0_::error::QuizSolveError;
     use rstest::rstest;
 
     #[rstest]
@@ -49,7 +59,7 @@ mod tests {
         let error = result.unwrap_err();
 
         use std::num::ParseIntError;
-        assert!(error.root_cause().downcast_ref::<ParseIntError>().is_some());
+        assert!(error.downcast_ref::<ParseIntError>().is_some());
     }
 
     #[rstest]
@@ -62,18 +72,33 @@ mod tests {
         let error = result.unwrap_err();
 
         // errorの種類を検証
-        assert_eq!(error.to_string().as_str(), "no input error")
+        assert!(error.downcast_ref::<QuizSolveError>().is_some());
+        let error = error.downcast::<QuizSolveError>().unwrap();
+        assert_eq!(error, QuizSolveError::LackOfInputOnParseError)
     }
 
     #[rstest]
-    #[case("1 1")]
-    #[case("0 -5")]
+    #[case("1 1", 1)]
+    #[case("0 -5", -5)]
     #[allow(non_snake_case)]
-    fn 誤_num1がnum2以上ならエラーを返す(#[case] input: &str) {
+    fn 誤_num1がnum2以上ならエラーを返す(#[case] input: &str, #[case] num2: isize) {
         let result = logic(input);
 
         assert!(result.is_err());
         let error = result.unwrap_err();
-        assert_eq!(error.to_string().as_str(), "Invalid input")
+        //       assert_eq!(error.to_string().as_str(), "Invalid input")
+
+        // errorの種類を検証
+        assert!(error.downcast_ref::<QuizSolveError>().is_some());
+        let error = error.downcast::<QuizSolveError>().unwrap();
+        assert_eq!(
+            error,
+            QuizSolveError::InvalidInputError {
+                value: QuizSolveErrorValue {
+                    value: Box::new(num2)
+                },
+                err_msg: "the second argument must be greater than the first.".to_owned()
+            }
+        );
     }
 }
