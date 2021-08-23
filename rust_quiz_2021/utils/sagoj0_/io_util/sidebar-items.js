@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["io_handler",""]]});
+initSidebarItems({"fn":[["io_handler","srcに対しlogicを適用したうえでその結果をdstに書き込む."]]});
