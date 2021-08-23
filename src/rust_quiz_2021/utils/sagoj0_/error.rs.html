@@ -58,6 +58,9 @@
 <span id="56">56</span>
 <span id="57">57</span>
 <span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
 </pre><pre class="rust">
 <span class="doccomment">//! rust_quizの実装で用いるエラーを定義する.</span>
 <span class="doccomment">//! enumの列挙子は適宜追加する.</span>
@@ -78,6 +81,9 @@
         <span class="ident">value</span>: <span class="ident">QuizSolveErrorValue</span>,
         <span class="ident">err_msg</span>: <span class="ident">String</span>,
     },
+
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Overflow occured: {0}&quot;</span>)]</span>
+    <span class="ident">OverflowError</span>(<span class="ident">String</span>),
 }
 
 <span class="kw">impl</span> <span class="ident">QuizSolveError</span> {
