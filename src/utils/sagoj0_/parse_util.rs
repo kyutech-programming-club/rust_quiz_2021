@@ -1,8 +1,11 @@
+//! 文字列のパースに関するユーティリティを提供する．
+
 use crate::utils::sagoj0_::error::QuizSolveError;
 use anyhow::{bail, Result};
 use std::iter::Iterator;
 use std::{error, str::FromStr};
 
+/// &strのイテレータを受け取り，それを消費して任意の値にパースする．
 pub fn parse<'a, T, I>(iter: &mut I) -> Result<T>
 where
     T: FromStr,

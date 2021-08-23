@@ -18,6 +18,7 @@ pub enum QuizSolveError {
         err_msg: String,
     },
 
+    /// オーバフローが起こった際のエラー
     #[error("Overflow occured: {0}")]
     OverflowError(String),
 }
