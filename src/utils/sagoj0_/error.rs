@@ -17,6 +17,9 @@ pub enum QuizSolveError {
         value: QuizSolveErrorValue,
         err_msg: String,
     },
+
+    #[error("Overflow occured: {0}")]
+    OverflowError(String),
 }
 
 impl QuizSolveError {
