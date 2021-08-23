@@ -28,7 +28,7 @@ fn logic(input: &str) -> Result<i64> {
     );
 
     (num1..=num2)
-        .try_fold(1 as i64, |acc, x| acc.checked_mul(x))
+        .try_fold(1_i64, |acc, x| acc.checked_mul(x))
         .ok_or(anyhow!(QuizSolveError::OverflowError(
             "multiplication overflow".to_owned()
         )))
