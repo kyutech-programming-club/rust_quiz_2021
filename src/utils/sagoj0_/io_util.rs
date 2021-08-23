@@ -1,7 +1,14 @@
+//! 入出力に関連するユーティリティを提供する.
+
 use anyhow::Result;
 use std::fmt::Display;
 use std::io::{Read, Write};
 
+/// srcに対しlogicを適用したうえでその結果をdstに書き込む.
+/// * `src` - 入力
+/// * `dst` - 出力
+/// * `logic` - 入力に対して行う処理を記述した関数．
+/// 引数は&str一つ，戻り値型はResultである必要がある．
 pub fn io_handler<F, T>(src: &mut impl Read, dst: &mut impl Write, logic: F) -> Result<()>
 where
     F: FnOnce(&str) -> Result<T>,
