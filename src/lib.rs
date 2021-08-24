@@ -8,4 +8,5 @@ mod q_0820;
 mod q_0821;
 mod q_0822;
 mod q_0823;
-// mod q_0824;
+mod q_0824;
+// mod q_0825;
