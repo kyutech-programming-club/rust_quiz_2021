@@ -12,6 +12,7 @@ jobs:
     if: false
     runs-on: ubuntu-latest
     steps: 
+      - run: exit
   lint:
     name: lint
     runs-on: ubuntu-latest
