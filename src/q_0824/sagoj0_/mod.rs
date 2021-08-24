@@ -4,7 +4,6 @@ use crate::utils::sagoj0_::error::QuizSolveError::LackOfInputOnParseError;
 use crate::utils::sagoj0_::{io_util, parse_util};
 use anyhow::{ensure, Result};
 use std::io;
-use std::sync::atomic::AtomicUsize;
 
 fn main() -> Result<()> {
     let mut stdin = io::stdin();
