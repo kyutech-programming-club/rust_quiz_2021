@@ -1,7 +1,5 @@
 # Rust Quiz 2021
-[![Run lint](https://github.com/kyutech-programming-club/rust_quiz_2021/actions/workflows/lint.yml/badge.svg)](https://github.com/kyutech-programming-club/rust_quiz_2021/actions/workflows/lint.yml)
 [![Run test](https://github.com/kyutech-programming-club/rust_quiz_2021/actions/workflows/test.yml/badge.svg)](https://github.com/kyutech-programming-club/rust_quiz_2021/actions/workflows/test.yml)
-[![GitHub issues](https://img.shields.io/github/issues/kyutech-programming-club/rust_quiz_2021)](https://github.com/kyutech-programming-club/rust_quiz_2021/issues)
 [![GitHub stars](https://img.shields.io/github/stars/kyutech-programming-club/rust_quiz_2021)](https://github.com/kyutech-programming-club/rust_quiz_2021/stargazers)
 [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Fkyutech_proken)](https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fkyutech-programming-club%2Frust_quiz_2021)
 
