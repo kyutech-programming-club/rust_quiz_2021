@@ -1,9 +1,9 @@
-use std::num::ParseIntError;
 use std::error::Error;
+use std::num::ParseIntError;
 
 #[allow(dead_code)]
 pub fn convert(input: &str) -> Result<i32, ParseIntError> {
-  input.parse::<i32>()
+    input.parse::<i32>()
 }
 
 #[allow(dead_code)]
@@ -13,8 +13,8 @@ pub fn add_one(input: Result<i32, ParseIntError>) -> Result<i32, Box<dyn Error>>
 
 #[cfg(test)]
 mod tests {
-    use rstest::rstest;
     use super::*;
+    use rstest::rstest;
 
     #[rstest]
     #[case("0", 1)]
