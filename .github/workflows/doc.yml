@@ -2,9 +2,8 @@ name: doc
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: 
+      -  master 
 
 env:
   CARGO_TERM_COLOR: always
@@ -12,16 +11,8 @@ env:
 jobs:
   doc:
     runs-on: ubuntu-latest
-    if:  github.event_name == 'push' || github.event.pull_request.merged == true
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v2
-      with:
-        path: |
-          ~/.cargo/registry
-          ~/.cargo/git
-          target          
-        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
     - name: Run doc
       run: cargo doc --no-deps
     - name: Deploy

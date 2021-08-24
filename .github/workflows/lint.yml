@@ -6,11 +6,7 @@ on:
 
 jobs:
   lint:
-    strategy:
-      matrix:
-        rust:
-          - stable
-        os: [ubuntu-latest]
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -21,13 +17,28 @@ jobs:
             ~/.cargo/git
             target          
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - uses: actions-rs/toolchain@v1
+      - uses: visvirial/sccache-action@v1
         with:
-          toolchain: nightly
-          components: clippy
-          override: true
+          cache-key: ${{ runner.os }}-sccache-${{ hashFiles('**/Cargo.lock') }}
       - run: rustup component add clippy
       - uses: actions-rs/clippy-check@v1
+        id: clippy_check
+        continue-on-error: true
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-features -- -D warnings
+      - id: make-pr-comment
+        run: | 
+          if [ ${{ steps.clippy_check.outcome }} = 'success' ]; then
+            echo ::set-output name=result::":white_flower: **マージして問題ありません！** :100:"
+          else
+            echo ::set-output name=result::":sob: **修正可能箇所があります！** :skull:"
+          fi
+      - uses: marocchino/sticky-pull-request-comment@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          header: header-of-comment
+          message: ${{ steps.make-pr-comment.outputs.result }}
+      - run: |
+          exit `[ ${{ steps.clippy_check.outcome }} = 'success' ]`
+
