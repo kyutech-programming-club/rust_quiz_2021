@@ -27,7 +27,7 @@ fn main(src: &mut impl Read, dst: &mut impl Write) -> Result<()> {
 }
 
 #[allow(dead_code)]
-fn main2(input: String) -> Result<&'static str> {
+fn main2(input: &str) -> Result<&'static str> {
     let mut input = input.split_whitespace();
     let x = parse(&mut input)?;
     let y = parse(&mut input)?;

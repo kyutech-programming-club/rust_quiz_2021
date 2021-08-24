@@ -10,15 +10,15 @@ use anyhow::Result;
 ///
 /// src には [`std::io::Read`] が，
 /// dst には [`std::io::Write`] が実装されている必要がある．
-/// f は [`std::string::String`] を引数にとり
+/// f は [`&str`] を引数にとり
 /// [`anyhow::Result`] を返す [`std::ops::FnOnce`] である．
 pub fn apply<T, F>(src: &mut impl Read, dst: &mut impl Write, f: F) -> Result<()>
 where
 T: Display,
-F: FnOnce(String) -> Result<T> {
+F: FnOnce(&str) -> Result<T> {
     let mut s = String::new();
     src.read_to_string(&mut s)?;
-    let result = f(s)?;
+    let result = f(&s)?;
     writeln!(dst, "{}", result)?;
     Ok(())
 }
