@@ -30,8 +30,7 @@ jobs:
       - id: make-pr-comment
         if: steps.clippy_check.outcome == 'success'
         run: | 
-          pr-comment=":white_flower: **マージして問題ありません！** :100:"
-          echo ::set-output name=result::${pr-comment}
+          echo ::set-output name=result::":white_flower: **マージして問題ありません！** :100:"
       - uses: marocchino/sticky-pull-request-comment@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
