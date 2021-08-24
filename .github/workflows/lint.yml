@@ -8,11 +8,6 @@ env:
   CARGO_TERM_COLOR: always
   
 jobs:
-  clippy: 
-    if: false
-    runs-on: ubuntu-latest
-    steps: 
-      - run: exit
   lint:
     name: lint
     runs-on: ubuntu-latest
