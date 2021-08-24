@@ -32,7 +32,7 @@ jobs:
           if [ ${{ steps.clippy_check.outcome }} = 'success' ]; then
             echo ::set-output name=result::":white_flower: **マージして問題ありません！** :100:"
           else
-            echo ::set-output name=result::":sob: **修正可能箇所があります！** :skull"
+            echo ::set-output name=result::":sob: **修正可能箇所があります！** :skull:"
           fi
       - uses: marocchino/sticky-pull-request-comment@v1
         with:
