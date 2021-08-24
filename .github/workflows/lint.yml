@@ -28,14 +28,17 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-features -- -D warnings
       - id: make-pr-comment
-        if: steps.clippy_check.outcome == 'success'
         run: | 
-          echo ::set-output name=result::":white_flower: **マージして問題ありません！** :100:"
+          if [ ${{ steps.clippy_check.outcome }} = 'success' ]; then
+            echo ::set-output name=result::":white_flower: **マージして問題ありません！** :100:"
+          else
+            echo ::set-output name=result::":sob: **修正可能箇所があります！** :skull"
+          fi
       - uses: marocchino/sticky-pull-request-comment@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           header: header-of-comment
           message: ${{ steps.make-pr-comment.outputs.result }}
       - run: |
-          exit `[ ${{ steps.clippy_check.outcome}} = 'success' ]`
+          exit `[ ${{ steps.clippy_check.outcome }} = 'success' ]`
 
