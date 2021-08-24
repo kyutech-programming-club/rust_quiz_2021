@@ -26,12 +26,21 @@ fn main(src: &mut impl Read, dst: &mut impl Write) -> Result<()> {
     Ok(())
 }
 
+#[allow(dead_code)]
+fn main2(input: String) -> Result<&'static str> {
+    let mut input = input.split_whitespace();
+    let x = parse(&mut input)?;
+    let y = parse(&mut input)?;
+    ensure!(y != 0, "The second number must not be 0.");
+    Ok(if x % y == 0 { "Y" } else { "N" })
+}
 
 #[cfg(test)]
 #[allow(non_snake_case)]
 mod test {
     use super::*;
     use rstest::rstest;
+    use crate::utils::tanacchi::stream::apply;
 
     #[rstest]
     #[case("42 3", "Y\n")]
@@ -44,6 +53,22 @@ mod test {
         let mut stdout_mock = vec![];
 
         let result = main(&mut stdin_mock, &mut stdout_mock);
+
+        assert!(result.is_ok());
+        assert_eq!(stdout_mock, expected);
+    }
+
+    #[rstest]
+    #[case("42 3", "Y\n")]
+    #[case("-42 3", "Y\n")]
+    #[case("2\n1", "Y\n")]
+    #[case("0\t1", "Y\n")]
+    fn should_write_Y_for_divisible_nums2(#[case] input: &str, #[case] expected: &str) {
+        let mut stdin_mock = input.as_bytes();
+        let expected = expected.as_bytes();
+        let mut stdout_mock = vec![];
+
+        let result = apply(&mut stdin_mock, &mut stdout_mock, main2);
 
         assert!(result.is_ok());
         assert_eq!(stdout_mock, expected);
