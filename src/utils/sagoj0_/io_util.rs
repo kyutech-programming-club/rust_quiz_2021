@@ -74,6 +74,7 @@ mod tests {
     }
 
     use anyhow::anyhow;
+    use difference::assert_diff;
     use std::io::{self, ErrorKind::*};
     #[rstest]
     #[case(anyhow!(io::Error::new(NotFound, "ないです")))]
@@ -94,6 +95,6 @@ mod tests {
 
         assert!(result.is_err());
         let error = result.unwrap_err();
-        assert_eq!(error.to_string(), expected);
+        assert_diff!(&error.to_string(), &expected, "\n", 0);
     }
 }
