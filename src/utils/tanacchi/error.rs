@@ -1,3 +1,4 @@
+//! エラー周りの定義
 use thiserror::Error;
 use std::num::ParseIntError;
 
