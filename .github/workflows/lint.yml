@@ -36,5 +36,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           header: header-of-comment
           message: ${{ steps.make-pr-comment.outputs.result }}
-      - run: exit ${{ steps.clippy_check.outcome == 'success' }}
+      - if: steps.clippy_check.outcome == 'success'
+        run: exit 0
+      - if: steps.clippy_check.outcome == 'failure'
+        run: exit 1
 
