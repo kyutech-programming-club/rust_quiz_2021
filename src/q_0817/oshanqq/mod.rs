@@ -13,25 +13,32 @@ pub fn add_one(input: Result<i32, ParseIntError>) -> Result<i32, Box<dyn Error>>
 
 #[cfg(test)]
 mod tests {
+    use rstest::rstest;
     use super::*;
 
-    #[test]
-    fn added_nomally() {
-        let number = "42";
-        assert!(convert(&number).is_ok());
-        assert_eq!(add_one(convert(&number)).unwrap(), 43);
+    #[rstest]
+    #[case("0", 1)]
+    #[case("42", 43)]
+    #[case("-6", -5)]
+    fn added_nomally(#[case] input: &str, #[case] expected: i32) {
+        assert!(convert(&input).is_ok());
+        assert_eq!(add_one(convert(&input)).unwrap(), expected);
     }
 
-    #[test]
-    fn added_abnomaly() {
-        let number = "553";
-        assert!(convert(&number).is_ok());
-        assert_ne!(add_one(convert(&number)).unwrap(), 553);
+    #[rstest]
+    #[case("0", 0)]
+    #[case("42", 42)]
+    #[case("-6", -6)]
+    fn added_abnomaly(#[case] input: &str, #[case] expected: i32) {
+        assert!(convert(&input).is_ok());
+        assert_ne!(add_one(convert(&input)).unwrap(), expected);
     }
 
-    #[test]
-    fn parse_error() {
-        let input = "ahiahi";
+    #[rstest]
+    #[case("ahiahi")]
+    #[case("proken216")]
+    #[case("!#")]
+    fn parse_error(#[case] input: &str) {
         assert!(convert(&input).is_err());
     }
 }
