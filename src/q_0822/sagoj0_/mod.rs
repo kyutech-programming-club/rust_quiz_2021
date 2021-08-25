@@ -9,8 +9,7 @@ fn main() -> Result<()> {
     let mut stdin = io::stdin();
     let mut stdout = io::stdout();
 
-    io_util::io_handler(&mut stdin, &mut stdout, logic)?;
-    Ok(())
+    io_util::io_handler(&mut stdin, &mut stdout, logic)
 }
 
 fn logic(input: &str) -> Result<isize> {
@@ -34,6 +33,7 @@ fn logic(input: &str) -> Result<isize> {
 mod tests {
     use super::*;
     use crate::utils::sagoj0_::error::QuizSolveError;
+    use pretty_assertions::assert_eq;
     use rstest::rstest;
 
     #[rstest]

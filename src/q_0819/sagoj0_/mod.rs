@@ -1,107 +1,97 @@
 #![allow(dead_code)]
 
-use anyhow::{bail, Result};
-use std::io::{Read, Write};
+use crate::utils::sagoj0_::error::QuizSolveError;
+use crate::utils::sagoj0_::{io_util, parse_util};
+use anyhow::{ensure, Result};
+use std::io;
 
-fn parse(iter: &mut std::str::SplitWhitespace) -> Result<isize> {
-    if let Some(s) = iter.next() {
-        Ok(s.parse::<isize>()?)
-    } else {
-        eprintln!("数値が足りません");
-        bail!("Invalid number of input")
-    }
+fn main() -> Result<()> {
+    let mut stdin = io::stdin();
+    let mut stdout = io::stdout();
+
+    io_util::io_handler(&mut stdin, &mut stdout, logic)
 }
 
-fn main<R: Read, W: Write>(src: &mut R, dst: &mut W) -> Result<()> {
-    let mut buf = String::new();
-    src.read_to_string(&mut buf)?;
+fn logic(input: &str) -> Result<String> {
+    let mut iter = input.split_whitespace();
 
-    let mut iter = buf.split_whitespace();
+    let x: isize = parse_util::parse(&mut iter)?;
+    let y: isize = parse_util::parse(&mut iter)?;
 
-    let x = parse(&mut iter)?;
-    let y = parse(&mut iter)?;
+    ensure!(
+        y != 0,
+        QuizSolveError::invalid_input_error(0, "the second number must not be 0")
+    );
 
-    if y == 0 {
-        bail!("the second number must not be 0");
-    }
-
-    writeln!(dst, "{}", if x % y == 0 { "Y" } else { "N" })?;
-    Ok(())
+    Ok(if x % y == 0 {
+        "Y".to_owned()
+    } else {
+        "N".to_owned()
+    })
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use difference::assert_diff;
+    use pretty_assertions::assert_eq;
     use rstest::rstest;
 
     #[rstest]
-    #[case("4 2", "Y\n")]
-    #[case("100 1", "Y\n")]
-    #[case("57 3", "Y\n")]
-    #[case("-4 -2", "Y\n")]
-    #[case("0 1", "Y\n")]
-    #[case("0\n1", "Y\n")]
+    #[case("4 2", "Y")]
+    #[case("100 1", "Y")]
+    #[case("57 3", "Y")]
+    #[case("-4 -2", "Y")]
+    #[case("0 1", "Y")]
+    #[case("0\n1", "Y")]
     fn 正_割り切れた際に_yが出力される(#[case] input: &str, #[case] expected: &str) {
-        let expected = expected.as_bytes();
-
-        let mut stdin_mock = input.as_bytes();
-        let mut stdout_mock = vec![];
-
-        let result = main(&mut stdin_mock, &mut stdout_mock);
+        let result = logic(input);
 
         assert!(result.is_ok());
-        assert_eq!(stdout_mock, expected);
+        let result = result.unwrap();
+        assert_diff!(result.as_str(), expected, "\n", 0);
     }
 
     #[rstest]
-    #[case("1 3", "N\n")]
-    #[case("-5 4", "N\n")]
+    #[case("1 3", "N")]
+    #[case("-5 4", "N")]
     fn 正_割り切れなかった際に_nが出力される(
         #[case] input: &str,
         #[case] expected: &str,
     ) {
-        let expected = expected.as_bytes();
-
-        let mut stdin_mock = input.as_bytes();
-        let mut stdout_mock = vec![];
-
-        let result = main(&mut stdin_mock, &mut stdout_mock);
+        let result = logic(input);
 
         assert!(result.is_ok());
-        assert_eq!(stdout_mock, expected);
+        let result = result.unwrap();
+        assert_eq!(result.as_str(), expected);
     }
 
     #[test]
     #[allow(non_snake_case)]
     fn 誤_パースに失敗した際はParseIntErrorを返す() {
-        use matches::assert_matches;
         use std::num::ParseIntError;
-
-        let mut stdin_mock = "-aaa".as_bytes();
-        let mut stdout_mock = vec![];
-
-        let result = main(&mut stdin_mock, &mut stdout_mock);
-
+        let result = logic("aa");
         assert!(result.is_err());
         let error = result.unwrap_err();
 
         // errorの種類を検証
-        assert_matches!(error.root_cause().downcast_ref::<ParseIntError>(), Some(_));
+        assert!(error.downcast_ref::<ParseIntError>().is_some());
     }
 
-    #[test]
+    #[rstest]
     #[allow(non_snake_case)]
-    fn 誤_入力が足りなければエラーを返す() {
-        let mut stdin_mock = "1".as_bytes();
-        let mut stdout_mock = vec![];
-
-        let result = main(&mut stdin_mock, &mut stdout_mock);
+    #[case(" ")]
+    #[case("1")]
+    fn 誤_入力が足りなければエラーを返す(#[case] input: &str) {
+        let result = logic(input);
 
         assert!(result.is_err());
         let error = result.unwrap_err();
 
         // errorの種類を検証
-        assert_eq!(error.to_string().as_str(), "Invalid number of input")
+        assert!(error.downcast_ref::<QuizSolveError>().is_some());
+        let error = error.downcast::<QuizSolveError>().unwrap();
+        assert_eq!(error, QuizSolveError::LackOfInputOnParseError);
     }
 
     #[rstest]
@@ -109,16 +99,16 @@ mod tests {
     #[case("0 0")]
     #[allow(non_snake_case)]
     fn 誤_二つ目の入力が0ならエラーを返す(#[case] input: &str) {
-        let mut stdin_mock = input.as_bytes();
-        let mut stdout_mock = vec![];
-
-        let result = main(&mut stdin_mock, &mut stdout_mock);
+        let result = logic(input);
 
         assert!(result.is_err());
         let error = result.unwrap_err();
+
+        assert!(error.downcast_ref::<QuizSolveError>().is_some());
+        let error = error.downcast::<QuizSolveError>().unwrap();
         assert_eq!(
-            error.to_string().as_str(),
-            "the second number must not be 0"
-        )
+            error,
+            QuizSolveError::invalid_input_error(0, "the second number must not be 0")
+        );
     }
 }

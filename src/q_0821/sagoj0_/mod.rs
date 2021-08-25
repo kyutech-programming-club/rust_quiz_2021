@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
-use crate::utils::sagoj0_::io_util;
-use crate::utils::sagoj0_::parse_util;
+use crate::utils::sagoj0_::error::QuizSolveError;
+use crate::utils::sagoj0_::{io_util, parse_util};
 use anyhow::{ensure, Result};
 use std::io;
 
@@ -9,8 +9,7 @@ fn main() -> Result<()> {
     let mut stdin = io::stdin();
     let mut stdout = io::stdout();
 
-    io_util::io_handler(&mut stdin, &mut stdout, logic)?;
-    Ok(())
+    io_util::io_handler(&mut stdin, &mut stdout, logic)
 }
 
 fn logic(input: &str) -> Result<String> {
@@ -19,7 +18,10 @@ fn logic(input: &str) -> Result<String> {
     let height: f64 = parse_util::parse(&mut iter)?;
     let width: f64 = parse_util::parse(&mut iter)?;
 
-    ensure!(height > 0., "the height value must be greater than zero");
+    ensure!(
+        height > 0.,
+        QuizSolveError::invalid_input_error(0, "the height value must be greater than zero")
+    );
 
     Ok(match width / height / height {
         bmi if bmi < 18.5 => "瘦せ型".to_owned(),
@@ -31,6 +33,8 @@ fn logic(input: &str) -> Result<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use difference::assert_diff;
+    use pretty_assertions::assert_eq;
     use rstest::rstest;
 
     #[rstest]
@@ -41,7 +45,8 @@ mod tests {
         let result = logic(input);
 
         assert!(result.is_ok());
-        assert_eq!(result.unwrap(), expected);
+        let result = result.unwrap();
+        assert_diff!(result.as_str(), expected, "\n", 0);
     }
 
     #[rstest]
@@ -53,12 +58,8 @@ mod tests {
         assert!(result.is_err());
         let error = result.unwrap_err();
 
-        use matches::assert_matches;
         use std::num::ParseFloatError;
-        assert_matches!(
-            error.root_cause().downcast_ref::<ParseFloatError>(),
-            Some(_)
-        );
+        assert!(error.downcast_ref::<ParseFloatError>().is_some());
     }
 
     #[rstest]
@@ -71,7 +72,9 @@ mod tests {
         let error = result.unwrap_err();
 
         // errorの種類を検証
-        assert_eq!(error.to_string().as_str(), "no input error")
+        assert!(error.downcast_ref::<QuizSolveError>().is_some());
+        let error = error.downcast::<QuizSolveError>().unwrap();
+        assert_eq!(error, QuizSolveError::LackOfInputOnParseError)
     }
 
     #[rstest]
@@ -83,9 +86,12 @@ mod tests {
 
         assert!(result.is_err());
         let error = result.unwrap_err();
+
+        assert!(error.downcast_ref::<QuizSolveError>().is_some());
+        let error = error.downcast::<QuizSolveError>().unwrap();
         assert_eq!(
-            error.to_string().as_str(),
-            "the height value must be greater than zero"
+            error,
+            QuizSolveError::invalid_input_error(0, "the height value must be greater than zero")
         )
     }
 }

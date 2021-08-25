@@ -9,8 +9,7 @@ fn main() -> Result<()> {
     let mut stdin = io::stdin();
     let mut stdout = io::stdout();
 
-    io_util::io_handler(&mut stdin, &mut stdout, logic)?;
-    Ok(())
+    io_util::io_handler(&mut stdin, &mut stdout, logic)
 }
 
 fn logic(input: &str) -> Result<isize> {

@@ -24,5 +24,4 @@ jobs:
       - uses: visvirial/sccache-action@v1
         with:
           cache-key: ${{ runner.os }}-sccache-${{ hashFiles('**/Cargo.lock') }}-test
-      - run: cargo build --verbose
       - run: cargo test --verbose
