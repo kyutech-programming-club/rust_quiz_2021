@@ -38,6 +38,7 @@ fn logic(input: &str) -> Result<i64> {
 mod tests {
     use super::*;
     use crate::utils::sagoj0_::error::QuizSolveError;
+    use pretty_assertions::assert_eq;
     use rstest::rstest;
 
     #[rstest]
