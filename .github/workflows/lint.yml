@@ -19,10 +19,10 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target          
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}-lint
       - uses: visvirial/sccache-action@v1
         with:
-          cache-key: ${{ runner.os }}-sccache-${{ hashFiles('**/Cargo.lock') }}
+          cache-key: ${{ runner.os }}-sccache-${{ hashFiles('**/Cargo.lock') }}-lint
       - run: rustup component add clippy
       - uses: actions-rs/clippy-check@v1
         id: clippy_check
