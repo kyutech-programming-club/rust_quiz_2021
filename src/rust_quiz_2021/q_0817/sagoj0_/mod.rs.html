@@ -58,63 +58,65 @@
 <span id="56">56</span>
 <span id="57">57</span>
 <span id="58">58</span>
+<span id="59">59</span>
 </pre><pre class="rust">
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
 
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::utils::sagoj0_::io_util</span>;
 <span class="kw">use</span> <span class="ident">anyhow::Result</span>;
-<span class="kw">use</span> <span class="ident">std::io::Read</span>;
+<span class="kw">use</span> <span class="ident">std::io</span>;
 
-<span class="kw">fn</span> <span class="ident">input_plus1</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Read</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">String::new</span>();
-    <span class="ident">input</span>.<span class="ident">read_to_string</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>)<span class="question-mark">?</span>;
+<span class="kw">fn</span> <span class="ident">main</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdin</span> <span class="op">=</span> <span class="ident">io::stdin</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">io::stdout</span>();
 
-    <span class="kw">let</span> <span class="ident">num</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+    <span class="ident">io_util::io_handler</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stdin</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stdout</span>, <span class="ident">logic</span>)
+}
 
+<span class="kw">fn</span> <span class="ident">logic</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">num</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">num</span> <span class="op">+</span> <span class="number">1</span>)
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">pretty_assertions</span>::{<span class="ident">assert_eq</span>, <span class="ident">assert_ne</span>};
+    <span class="kw">use</span> <span class="ident">rstest::rstest</span>;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">正_読み込んだ値に1足した数値が返る</span>() {
-        <span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="string">&quot;42&quot;</span>.<span class="ident">to_owned</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdin_mock</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">as_bytes</span>();
-
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">input_plus1</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stdin_mock</span>);
+    <span class="attribute">#[<span class="ident">rstest</span>]</span>
+    <span class="attribute">#[<span class="ident">case</span>(<span class="string">&quot;42&quot;</span>, <span class="number">43</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">正_読み込んだ値に1足した数値が返る</span>(
+        <span class="attribute">#[<span class="ident">case</span>]</span> <span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="attribute">#[<span class="ident">case</span>]</span> <span class="ident">expected</span>: <span class="ident">isize</span>,
+    ) {
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">logic</span>(<span class="ident">input</span>);
 
         <span class="macro">assert!</span>(<span class="ident">result</span>.<span class="ident">is_ok</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">result</span>.<span class="ident">unwrap</span>(), <span class="number">42</span> <span class="op">+</span> <span class="number">1</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">result</span>.<span class="ident">unwrap</span>(), <span class="ident">expected</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">誤_入力足す1以外の値は返らない</span>() {
-        <span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="string">&quot;42&quot;</span>.<span class="ident">to_owned</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdin_mock</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">as_bytes</span>();
-
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">input_plus1</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stdin_mock</span>);
+    <span class="attribute">#[<span class="ident">rstest</span>]</span>
+    <span class="attribute">#[<span class="ident">case</span>(<span class="string">&quot;42&quot;</span>, <span class="number">42</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">誤_入力足す1以外の値は返らない</span>(<span class="attribute">#[<span class="ident">case</span>]</span> <span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="attribute">#[<span class="ident">case</span>]</span> <span class="ident">expected</span>: <span class="ident">isize</span>) {
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">logic</span>(<span class="ident">input</span>);
 
         <span class="macro">assert!</span>(<span class="ident">result</span>.<span class="ident">is_ok</span>());
-        <span class="macro">assert_ne!</span>(<span class="ident">result</span>.<span class="ident">unwrap</span>(), <span class="number">42</span>);
+        <span class="macro">assert_ne!</span>(<span class="ident">result</span>.<span class="ident">unwrap</span>(), <span class="ident">expected</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
     <span class="kw">fn</span> <span class="ident">誤_パースに失敗した際はParseIntErrorを返す</span>() {
-        <span class="kw">use</span> <span class="ident">matches::assert_matches</span>;
         <span class="kw">use</span> <span class="ident">std::num::ParseIntError</span>;
 
-        <span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="string">&quot;aa&quot;</span>.<span class="ident">to_owned</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdin_mock</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">as_bytes</span>();
-
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">input_plus1</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stdin_mock</span>);
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">logic</span>(<span class="string">&quot;aa&quot;</span>);
 
         <span class="macro">assert!</span>(<span class="ident">result</span>.<span class="ident">is_err</span>());
         <span class="kw">let</span> <span class="ident">error</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap_err</span>();
 
         <span class="comment">// errorの種類を検証</span>
-        <span class="macro">assert_matches!</span>(<span class="ident">error</span>.<span class="ident">root_cause</span>().<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">ParseIntError</span><span class="op">&gt;</span>(), <span class="prelude-val">Some</span>(<span class="kw">_</span>));
+        <span class="macro">assert!</span>(<span class="ident">error</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">ParseIntError</span><span class="op">&gt;</span>().<span class="ident">is_some</span>());
     }
 }
 </pre></div>
