@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+use crate::utils::sagoj0_::error::QuizSolveError;
 use crate::utils::sagoj0_::io_util;
 use anyhow::{ensure, Result};
 use std::f64::consts::PI;
@@ -8,7 +9,10 @@ use std::io;
 fn logic(input: &str) -> Result<f64> {
     let r = input.parse::<f64>()?;
 
-    ensure!(r >= 0 as f64, "0以上を入力してください");
+    ensure!(
+        r >= 0 as f64,
+        QuizSolveError::invalid_input_error(0, "0以上を入力してください")
+    );
     let answer = 4. * PI * r * r * r / 3.;
     Ok(answer)
 }
@@ -17,30 +21,27 @@ fn main() -> Result<()> {
     let mut stdin = io::stdin();
     let mut stdout = io::stdout();
 
-    io_util::io_handler(&mut stdin, &mut stdout, logic)?;
-    Ok(())
+    io_util::io_handler(&mut stdin, &mut stdout, logic)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use approx::assert_relative_eq;
+    use pretty_assertions::assert_eq;
     use rstest::rstest;
 
-    fn volume(r: f64) -> f64 {
-        4. * PI * r * r * r / 3.
-    }
-
     #[rstest]
-    #[case("3", volume(3 as f64))]
-    #[case("1.2", volume(1.2 as f64))]
-    #[case("1000", volume(1000 as f64))]
-    #[case("0", volume(0 as f64))]
+    #[case("1", 4. * PI / 3.)]
+    #[case("1.2", 4. * PI * 1.2 * 1.2 * 1.2 / 3.)]
+    #[case("1000", 4. * PI * 1000. * 1000. * 1000. / 3.)]
+    #[case("0", 0 as f64)]
     fn 正_球の体積を計算する(#[case] input: &str, #[case] expected: f64) {
         let result = logic(input);
 
         assert!(result.is_ok());
         let value = result.unwrap();
-        assert_eq!(value, expected);
+        assert_relative_eq!(value, expected);
     }
 
     #[rstest]
@@ -52,7 +53,12 @@ mod tests {
         assert!(result.is_err());
         let error = result.unwrap_err();
 
-        assert_eq!(error.to_string().as_str(), "0以上を入力してください");
+        assert!(error.downcast_ref::<QuizSolveError>().is_some());
+        let error = error.downcast::<QuizSolveError>().unwrap();
+        assert_eq!(
+            error,
+            QuizSolveError::invalid_input_error(0, "0以上を入力してください")
+        );
     }
 
     #[rstest]
@@ -64,11 +70,7 @@ mod tests {
         assert!(result.is_err());
         let error = result.unwrap_err();
 
-        use matches::assert_matches;
         use std::num::ParseFloatError;
-        assert_matches!(
-            error.root_cause().downcast_ref::<ParseFloatError>(),
-            Some(_)
-        );
+        assert!(error.downcast_ref::<ParseFloatError>().is_some());
     }
 }

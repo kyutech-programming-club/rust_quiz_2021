@@ -1,58 +1,59 @@
 #![allow(dead_code)]
 
+use crate::utils::sagoj0_::io_util;
 use anyhow::Result;
-use std::io::Read;
+use std::io;
 
-fn input_plus1<T: Read>(input: &mut T) -> Result<isize> {
-    let mut buf = String::new();
-    input.read_to_string(&mut buf)?;
+fn main() -> Result<()> {
+    let mut stdin = io::stdin();
+    let mut stdout = io::stdout();
 
-    let num = buf.parse::<isize>()?;
+    io_util::io_handler(&mut stdin, &mut stdout, logic)
+}
 
+fn logic(input: &str) -> Result<isize> {
+    let num = input.parse::<isize>()?;
     Ok(num + 1)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use pretty_assertions::{assert_eq, assert_ne};
+    use rstest::rstest;
 
-    #[test]
-    fn 正_読み込んだ値に1足した数値が返る() {
-        let input = "42".to_owned();
-        let mut stdin_mock = input.as_bytes();
-
-        let result = input_plus1(&mut stdin_mock);
+    #[rstest]
+    #[case("42", 43)]
+    fn 正_読み込んだ値に1足した数値が返る(
+        #[case] input: &str,
+        #[case] expected: isize,
+    ) {
+        let result = logic(input);
 
         assert!(result.is_ok());
-        assert_eq!(result.unwrap(), 42 + 1);
+        assert_eq!(result.unwrap(), expected);
     }
 
-    #[test]
-    fn 誤_入力足す1以外の値は返らない() {
-        let input = "42".to_owned();
-        let mut stdin_mock = input.as_bytes();
-
-        let result = input_plus1(&mut stdin_mock);
+    #[rstest]
+    #[case("42", 42)]
+    fn 誤_入力足す1以外の値は返らない(#[case] input: &str, #[case] expected: isize) {
+        let result = logic(input);
 
         assert!(result.is_ok());
-        assert_ne!(result.unwrap(), 42);
+        assert_ne!(result.unwrap(), expected);
     }
 
     #[test]
     #[allow(non_snake_case)]
     fn 誤_パースに失敗した際はParseIntErrorを返す() {
-        use matches::assert_matches;
         use std::num::ParseIntError;
 
-        let input = "aa".to_owned();
-        let mut stdin_mock = input.as_bytes();
-
-        let result = input_plus1(&mut stdin_mock);
+        let result = logic("aa");
 
         assert!(result.is_err());
         let error = result.unwrap_err();
 
         // errorの種類を検証
-        assert_matches!(error.root_cause().downcast_ref::<ParseIntError>(), Some(_));
+        assert!(error.downcast_ref::<ParseIntError>().is_some());
     }
 }
