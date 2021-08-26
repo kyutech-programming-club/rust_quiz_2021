@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["sagoj0_",""]]});
+initSidebarItems({"mod":[["sagoj0_",""],["tanacchi",""]]});

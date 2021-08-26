@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["apply","src から入力を読んで その入力を f に渡して呼び出し， 返り値を dst に書き込む．"]]});
