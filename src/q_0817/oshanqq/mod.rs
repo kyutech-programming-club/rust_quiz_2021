@@ -1,44 +1,55 @@
-use std::error::Error;
-use std::num::ParseIntError;
+use anyhow::Result;
+use std::io::Read;
 
 #[allow(dead_code)]
-pub fn convert(input: &str) -> Result<i32, ParseIntError> {
-    input.parse::<i32>()
-}
+fn plus_one<T: Read>(input: &mut T) -> Result<isize> {
+    let mut buf = String::new();
+    input.read_to_string(&mut buf)?;
+    let num = buf.parse::<isize>()?;
 
-#[allow(dead_code)]
-pub fn add_one(input: Result<i32, ParseIntError>) -> Result<i32, Box<dyn Error>> {
-    Ok(input.unwrap() + 1)
+    Ok(num + 1)
 }
 
 #[cfg(test)]
-mod tests {
+mod tests{
     use super::*;
-    use rstest::rstest;
 
-    #[rstest]
-    #[case("0", 1)]
-    #[case("42", 43)]
-    #[case("-6", -5)]
-    fn added_nomally(#[case] input: &str, #[case] expected: i32) {
-        assert!(convert(&input).is_ok());
-        assert_eq!(add_one(convert(&input)).unwrap(), expected);
+    #[test]
+    fn add_nomally() {
+        let input = "42".to_owned();
+        let mut stdin_mock = input.as_bytes();
+
+        let result = plus_one(&mut stdin_mock);
+
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), 42 + 1);
     }
 
-    #[rstest]
-    #[case("0", 0)]
-    #[case("42", 42)]
-    #[case("-6", -6)]
-    fn added_abnomaly(#[case] input: &str, #[case] expected: i32) {
-        assert!(convert(&input).is_ok());
-        assert_ne!(add_one(convert(&input)).unwrap(), expected);
+    #[test]
+    fn failed_addition() {
+        let input = "42".to_owned();
+        let mut stdin_mock = input.as_bytes();
+
+        let result = plus_one(&mut stdin_mock);
+
+        assert!(result.is_ok());
+        assert_ne!(result.unwrap(), 42);
     }
 
-    #[rstest]
-    #[case("ahiahi")]
-    #[case("proken216")]
-    #[case("!#")]
-    fn parse_error(#[case] input: &str) {
-        assert!(convert(&input).is_err());
+    #[test]
+    fn type_error() {
+        use matches::assert_matches;
+        use std::num::ParseIntError;
+
+        let input = "aa".to_owned();
+        let mut stdin_mock = input.as_bytes();
+
+        let result = plus_one(&mut stdin_mock);
+
+        assert!(result.is_err());
+        let error = result.unwrap_err();
+
+        assert_matches!(error.root_cause().downcast_ref::<ParseIntError>(), Some(_));
     }
 }
+
