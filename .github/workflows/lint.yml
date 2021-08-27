@@ -3,6 +3,9 @@ name: lint
 on:
   pull_request:
     types: [opened, synchronize]
+  push:
+    branches:
+      - master
 
 env:
   CARGO_TERM_COLOR: always
