@@ -20,6 +20,7 @@ fn logic(input: &str) -> Result<usize> {
     let mut iter = input.split_whitespace();
     let n: usize = parse_util::parse(&mut iter)?;
 
+    // max_by_keyは複数の最大値の中で最後の要素を返す
     (1..=n)
         .max_by_key(|&i| count_divisor(i))
         .ok_or(anyhow!(QuizSolveError::invalid_input_error(
