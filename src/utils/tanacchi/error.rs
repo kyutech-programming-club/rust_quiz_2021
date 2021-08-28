@@ -8,6 +8,10 @@ pub enum Error {
     #[error("number of input elems must be {0}")]
     InvalidNumOfInputElems(isize),
 
+    /// 入力が不正のとき（メッセージ付き）
+    #[error("number of input elems must be {0}")]
+    InvalidInputError(&'static str),
+
     /// 整数にパースできなかったときのエラー
     #[error("connot parse to integer")]
     ParseIntError(#[source] ParseIntError),
