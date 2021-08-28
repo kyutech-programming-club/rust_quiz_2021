@@ -1,21 +1,12 @@
-use anyhow::{bail, Result};
+use anyhow::Result;
+use crate::utils::tanacchi::parser::parse_from_iter;
 
-
-#[allow(dead_code)]
-fn parse(input: &mut std::str::SplitWhitespace) -> Result<f64> {
-    if let Some(s) = input.next() {
-        Ok(s.parse::<f64>()?)
-    } else {
-        eprintln!("Number of input must be more than 1.");
-        bail!("Invalid number of input.")
-    }
-}
 
 #[allow(dead_code)]
 fn main(input: &str) -> Result<&'static str> {
     let mut input = input.split_whitespace();
-    let height = parse(&mut input)?;
-    let weight = parse(&mut input)?;
+    let height: f64 = parse_from_iter(&mut input)?;
+    let weight: f64 = parse_from_iter(&mut input)?;
     let bmi = weight / height.powi(2);
     Ok(if bmi < 18.5 {
         "痩せ型"
