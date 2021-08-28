@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["sagoj0_",""],["tanacchi",""]]});
+initSidebarItems({"mod":[["macros","任意のマクロを配置する．"],["sagoj0_",""],["tanacchi",""]]});

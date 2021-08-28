@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["utils","問題回答用の自作ライブラリモジュール． 回答と同様作成者毎にモジュールを分割する．"]]});
+initSidebarItems({"macro":[["assert_error_match","anyhowのエラーをダウンキャストし， 実際のエラー値を検証する． (written by `sagoj0_`)"]],"mod":[["utils","問題回答用の自作ライブラリモジュール． 回答と同様作成者毎にモジュールを分割する．"]]});
