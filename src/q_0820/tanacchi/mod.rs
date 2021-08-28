@@ -1,11 +1,14 @@
 use std::io;
 use std::f64::consts::PI;
 use anyhow::{ensure, Result};
-use crate::utils::tanacchi::stream;
+use crate::utils::tanacchi::{error, stream};
 
 fn calc_volume(input: &str) -> Result<f64> {
     let r = input.parse::<f64>()?;
-    ensure!(r >= 0.0, "Radian must be greater than 0.");
+    ensure!(
+        r >= 0.0,
+        error::Error::InvalidInputError("Radian must be greater than 0.")
+    );
     Ok(4.0 * PI * r.powi(3) / 3.0)
 }
 
@@ -20,6 +23,7 @@ fn main() -> Result<()> {
 mod test {
     use super::*;
     use approx::assert_relative_eq;
+    use pretty_assertions::assert_eq;
     use rstest::rstest;
     use std::f64::consts::PI;
 
@@ -32,5 +36,22 @@ mod test {
 
         assert!(result.is_ok());
         assert_relative_eq!(result.unwrap(), expected);
+    }
+
+    #[rstest]
+    #[case("-1")]
+    #[case("-3.1")]
+    fn raise_error_for_nagative_radian(#[case] input: &str) {
+        let result = calc_volume(input);
+        assert!(result.is_err());
+
+        let err = result.unwrap_err();
+        assert!(err.downcast_ref::<error::Error>().is_some());
+
+        let err = err.downcast::<error::Error>().unwrap();
+        assert_eq!(
+            err,
+            error::Error::InvalidInputError("Radian must be greater than 0.")
+        );
     }
 }
