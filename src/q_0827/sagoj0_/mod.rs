@@ -28,7 +28,7 @@ fn is_prime(n: usize) -> bool {
 
 fn logic(input: &str) -> Result<usize> {
     let mut iter = input.split_whitespace();
-    let n: usize = parse_util::parse(&mut iter)?;
+    let n: usize = parse_util::parse_from_iter(&mut iter)?;
     ensure!(
         n > 0,
         QuizSolveError::invalid_input_error(0, "the argument must be greater than zero")

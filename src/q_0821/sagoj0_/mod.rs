@@ -15,8 +15,8 @@ fn main() -> Result<()> {
 fn logic(input: &str) -> Result<String> {
     let mut iter = input.split_whitespace();
 
-    let height: f64 = parse_util::parse(&mut iter)?;
-    let width: f64 = parse_util::parse(&mut iter)?;
+    let height: f64 = parse_util::parse_from_iter(&mut iter)?;
+    let width: f64 = parse_util::parse_from_iter(&mut iter)?;
 
     ensure!(
         height > 0.,

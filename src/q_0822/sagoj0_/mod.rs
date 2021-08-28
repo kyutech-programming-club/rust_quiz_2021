@@ -15,8 +15,8 @@ fn main() -> Result<()> {
 fn logic(input: &str) -> Result<isize> {
     let mut iter = input.split_whitespace();
 
-    let num1: isize = parse_util::parse(&mut iter)?;
-    let num2: isize = parse_util::parse(&mut iter)?;
+    let num1: isize = parse_util::parse_from_iter(&mut iter)?;
+    let num2: isize = parse_util::parse_from_iter(&mut iter)?;
 
     ensure!(
         num1 < num2,
