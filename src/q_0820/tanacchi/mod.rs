@@ -26,6 +26,7 @@ mod test {
     use pretty_assertions::assert_eq;
     use rstest::rstest;
     use std::f64::consts::PI;
+    use std::num::ParseFloatError;
 
     #[rstest]
     #[case("0", 0.0_f64)]
@@ -33,7 +34,6 @@ mod test {
     #[case("23.4", 4.0 * PI * 23.4_f64.powi(3) / 3.0)]
     fn should_calc_valid_float_number(#[case] input: &str, #[case] expected: f64) {
         let result = calc_volume(input);
-
         assert!(result.is_ok());
         assert_relative_eq!(result.unwrap(), expected);
     }
@@ -53,5 +53,16 @@ mod test {
             err,
             error::Error::InvalidInputError("Radian must be greater than 0.")
         );
+    }
+
+    #[rstest]
+    #[case("ahiahi")]
+    #[case("float")]
+    fn raise_error_when_input_isnt_float(#[case] input: &str) {
+        let result = calc_volume(input);
+        assert!(result.is_err());
+
+        let err = result.unwrap_err();
+        assert!(err.downcast_ref::<ParseFloatError>().is_some());
     }
 }
