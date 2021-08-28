@@ -1,13 +1,13 @@
 use std::io;
 use std::f64::consts::PI;
 use anyhow::{ensure, Result};
-use crate::utils::tanacchi::{error, stream};
+use crate::utils::tanacchi::{error::Error as MyError, stream};
 
 fn calc_volume(input: &str) -> Result<f64> {
     let r = input.parse::<f64>()?;
     ensure!(
         r >= 0.0,
-        error::Error::InvalidInputError("Radian must be greater than 0.")
+        MyError::InvalidInputError("Radian must be greater than 0.")
     );
     Ok(4.0 * PI * r.powi(3) / 3.0)
 }
@@ -46,12 +46,12 @@ mod test {
         assert!(result.is_err());
 
         let err = result.unwrap_err();
-        assert!(err.downcast_ref::<error::Error>().is_some());
+        assert!(err.downcast_ref::<MyError>().is_some());
 
-        let err = err.downcast::<error::Error>().unwrap();
+        let err = err.downcast::<MyError>().unwrap();
         assert_eq!(
             err,
-            error::Error::InvalidInputError("Radian must be greater than 0.")
+            MyError::InvalidInputError("Radian must be greater than 0.")
         );
     }
 
