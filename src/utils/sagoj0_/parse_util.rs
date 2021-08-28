@@ -25,6 +25,6 @@ where
     <T as FromStr>::Err: Sync + Send + error::Error + 'static,
 {
     let s = s.trim_start().trim_end();
-    ensure!(s != "", QuizSolveError::LackOfInputOnParseError);
+    ensure!(!s.is_empty(), QuizSolveError::LackOfInputOnParseError);
     s.parse::<T>().map_err(|e| anyhow!(e))
 }
