@@ -18,7 +18,7 @@ fn count_divisor(n: usize) -> usize {
 
 fn logic(input: &str) -> Result<usize> {
     let mut iter = input.split_whitespace();
-    let n: usize = parse_util::parse(&mut iter)?;
+    let n: usize = parse_util::parse_from_iter(&mut iter)?;
 
     // max_by_keyは複数の最大値の中で最後の要素を返す
     (1..=n)

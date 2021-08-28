@@ -3,3 +3,6 @@
 
 pub mod sagoj0_;
 pub mod tanacchi;
+
+#[macro_use]
+pub mod macros;

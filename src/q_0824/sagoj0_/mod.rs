@@ -20,7 +20,7 @@ fn logic(input: &str) -> Result<isize> {
     let mut iter = input.split("").skip(1).take(len);
 
     (0..len).try_fold(0, |acc, _| {
-        parse_util::parse::<isize, _>(&mut iter).map(|x| acc + x)
+        parse_util::parse_from_iter::<isize, _>(&mut iter).map(|x| acc + x)
     })
 }
 
