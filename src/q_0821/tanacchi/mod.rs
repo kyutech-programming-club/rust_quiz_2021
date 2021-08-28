@@ -21,7 +21,11 @@ fn main(input: &str) -> Result<&'static str> {
 mod test {
     use super::*;
     use rstest::rstest;
-    use crate::utils::tanacchi::stream::apply;
+    use crate::utils::tanacchi::{
+        error::Error as MyError,
+        stream::apply,
+    };
+    use std::num::ParseFloatError;
 
     #[rstest]
     #[case("1.70 50", "痩せ型\n")]
@@ -34,5 +38,35 @@ mod test {
         let result = apply(&mut stdin_mock, &mut stdout_mock, main);
         assert!(result.is_ok());
         assert_eq!(stdout_mock, expected);
+    }
+
+    #[rstest]
+    #[case("50")]
+    #[case("1.70")]
+    fn raise_error_when_number_of_inputs_is_not_enough(#[case] input: &str) {
+        let mut stdin_mock = input.as_bytes();
+        let mut stdout_mock = vec![];
+        let result = apply(&mut stdin_mock, &mut stdout_mock, main);
+        assert!(result.is_err());
+
+        let err = result.unwrap_err();
+        assert!(err.downcast_ref::<MyError>().is_some());
+
+        let err = err.downcast::<MyError>().unwrap();
+        assert_eq!(err, MyError::LackOfInputElemsError);
+    }
+
+    #[rstest]
+    #[case("ahi 50")]
+    #[case("1.70 chani")]
+    #[case("ahi ahi")]
+    fn raise_error_when_input_cannot_be_parsed_to_float(#[case] input: &str) {
+        let mut stdin_mock = input.as_bytes();
+        let mut stdout_mock = vec![];
+        let result = apply(&mut stdin_mock, &mut stdout_mock, main);
+        assert!(result.is_err());
+
+        let err = result.unwrap_err();
+        assert!(err.downcast_ref::<ParseFloatError>().is_some());
     }
 }
