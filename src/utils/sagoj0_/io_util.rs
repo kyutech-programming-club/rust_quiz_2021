@@ -79,7 +79,7 @@ mod tests {
     #[rstest]
     #[case(anyhow!(io::Error::new(NotFound, "ないです")))]
     #[case(anyhow!(io::Error::new(PermissionDenied, "ダメです")))]
-    fn 誤_logicがエラーを返した際はそのエラーを返す(#[case] err: anyhow::Error) {
+    fn 異_logicがエラーを返した際はそのエラーを返す(#[case] err: anyhow::Error) {
         use anyhow::bail;
 
         let mut stdin_mock = "".as_bytes();

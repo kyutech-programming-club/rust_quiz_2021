@@ -64,7 +64,7 @@ mod tests {
     #[case("")]
     #[case(" ")]
     #[case("1")]
-    fn 誤_入力が足りなければエラーを返す(#[case] input: &str) {
+    fn 異_入力が足りなければエラーを返す(#[case] input: &str) {
         let result = logic(input);
 
         assert_eq!(result.is_err(), true);

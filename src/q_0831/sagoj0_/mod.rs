@@ -52,7 +52,7 @@ mod tests {
     #[rstest]
     #[case("1 2 3 4 3 e")]
     #[case("2 # # 3 3 3")]
-    fn 誤_パースに失敗した際はエラーを返す(#[case] input: &str) {
+    fn 異_パースに失敗した際はエラーを返す(#[case] input: &str) {
         let result = logic(input);
 
         assert!(result.is_err());
@@ -65,7 +65,7 @@ mod tests {
     #[case("1 2 3 4 5")]
     #[case("1 2 3 4")]
     #[case("1")]
-    fn 誤_入力が足りなければエラーを返す(#[case] input: &str) {
+    fn 異_入力が足りなければエラーを返す(#[case] input: &str) {
         let result = logic(input);
         assert_eq!(result.is_err(), true);
         let error = result.unwrap_err();

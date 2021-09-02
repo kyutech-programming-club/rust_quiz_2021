@@ -36,7 +36,7 @@ mod tests {
 
     #[rstest]
     #[case("42", 42)]
-    fn 誤_入力足す1以外の値は返らない(#[case] input: &str, #[case] expected: isize) {
+    fn 異_入力足す1以外の値は返らない(#[case] input: &str, #[case] expected: isize) {
         let result = logic(input);
 
         assert!(result.is_ok());
@@ -45,7 +45,7 @@ mod tests {
 
     #[test]
     #[allow(non_snake_case)]
-    fn 誤_パースに失敗した際はParseIntErrorを返す() {
+    fn 異_パースに失敗した際はParseIntErrorを返す() {
         use std::num::ParseIntError;
 
         let result = logic("aa");

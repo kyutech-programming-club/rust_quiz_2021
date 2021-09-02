@@ -47,7 +47,7 @@ mod tests {
     #[rstest]
     #[case("-1")]
     #[case("-5.7")]
-    fn 誤_負の数の際はエラーを返す(#[case] input: &str) {
+    fn 異_負の数の際はエラーを返す(#[case] input: &str) {
         let result = logic(input);
 
         assert!(result.is_err());
@@ -64,7 +64,7 @@ mod tests {
     #[rstest]
     #[case("error")]
     #[case("###")]
-    fn 誤_パースに失敗した際はエラーを返す(#[case] input: &str) {
+    fn 異_パースに失敗した際はエラーを返す(#[case] input: &str) {
         let result = logic(input);
 
         assert!(result.is_err());
