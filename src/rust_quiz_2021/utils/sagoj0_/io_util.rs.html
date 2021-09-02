@@ -182,7 +182,7 @@
     <span class="attribute">#[<span class="ident">rstest</span>]</span>
     <span class="attribute">#[<span class="ident">case</span>(<span class="macro">anyhow!</span>(<span class="ident">io::Error::new</span>(<span class="ident">NotFound</span>, <span class="string">&quot;ないです&quot;</span>)))]</span>
     <span class="attribute">#[<span class="ident">case</span>(<span class="macro">anyhow!</span>(<span class="ident">io::Error::new</span>(<span class="ident">PermissionDenied</span>, <span class="string">&quot;ダメです&quot;</span>)))]</span>
-    <span class="kw">fn</span> <span class="ident">誤_logicがエラーを返した際はそのエラーを返す</span>(<span class="attribute">#[<span class="ident">case</span>]</span> <span class="ident">err</span>: <span class="ident">anyhow::Error</span>) {
+    <span class="kw">fn</span> <span class="ident">異_logicがエラーを返した際はそのエラーを返す</span>(<span class="attribute">#[<span class="ident">case</span>]</span> <span class="ident">err</span>: <span class="ident">anyhow::Error</span>) {
         <span class="kw">use</span> <span class="ident">anyhow::bail</span>;
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdin_mock</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>.<span class="ident">as_bytes</span>();
