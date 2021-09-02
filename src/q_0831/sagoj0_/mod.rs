@@ -3,6 +3,7 @@
 use crate::utils::sagoj0_::error::QuizSolveError::LackOfInputOnParseError;
 use crate::utils::sagoj0_::{io_util, parse_util::try_parse};
 use anyhow::{ensure, Result};
+use nalgebra::Vector3;
 use std::io;
 
 fn main() -> Result<()> {
@@ -19,6 +20,7 @@ fn logic(input: &str) -> Result<isize> {
         .map(try_parse)
         .collect::<Result<Vec<isize>>>()?;
     ensure!(x.len() == 3, LackOfInputOnParseError); // takeは要素数が足りなくても失敗しない
+    let x = Vector3::from_vec(x);
 
     let y = input
         .split_whitespace()
@@ -27,8 +29,9 @@ fn logic(input: &str) -> Result<isize> {
         .map(try_parse)
         .collect::<Result<Vec<isize>>>()?;
     ensure!(y.len() == 3, LackOfInputOnParseError);
+    let y = Vector3::from_vec(y);
 
-    Ok(x.into_iter().zip(y.into_iter()).map(|(x, y)| x * y).sum())
+    Ok(x.dot(&y))
 }
 
 #[cfg(test)]
