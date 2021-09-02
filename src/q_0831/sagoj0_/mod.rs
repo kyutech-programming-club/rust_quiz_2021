@@ -1,8 +1,7 @@
 #![allow(dead_code)]
 
-use crate::utils::sagoj0_::error::QuizSolveError::LackOfInputOnParseError;
-use crate::utils::sagoj0_::{io_util, parse_util::try_parse};
-use anyhow::{ensure, Result};
+use crate::utils::sagoj0_::{io_util, parse_util::parse_to_vec};
+use anyhow::Result;
 use nalgebra::Vector3;
 use std::io;
 
@@ -14,22 +13,9 @@ fn main() -> Result<()> {
 }
 
 fn logic(input: &str) -> Result<isize> {
-    let x = input
-        .split_whitespace()
-        .take(3)
-        .map(try_parse)
-        .collect::<Result<Vec<isize>>>()?;
-    ensure!(x.len() == 3, LackOfInputOnParseError); // takeは要素数が足りなくても失敗しない
-    let x = Vector3::from_vec(x);
-
-    let y = input
-        .split_whitespace()
-        .skip(3)
-        .take(3)
-        .map(try_parse)
-        .collect::<Result<Vec<isize>>>()?;
-    ensure!(y.len() == 3, LackOfInputOnParseError);
-    let y = Vector3::from_vec(y);
+    let mut iter = input.split_whitespace();
+    let x = Vector3::from_vec(parse_to_vec(&mut iter, 3)?);
+    let y = Vector3::from_vec(parse_to_vec(&mut iter, 3)?);
 
     Ok(x.dot(&y))
 }
@@ -37,7 +23,7 @@ fn logic(input: &str) -> Result<isize> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils::sagoj0_::error::QuizSolveError;
+    use crate::utils::sagoj0_::error::QuizSolveError::{self, LackOfInputOnParseError};
     use pretty_assertions::assert_eq;
     use rstest::rstest;
 
