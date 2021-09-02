@@ -3,7 +3,7 @@
 use crate::utils::sagoj0_::error::QuizSolveError::LackOfInputOnParseError;
 use crate::utils::sagoj0_::{io_util, parse_util::try_parse};
 use anyhow::{ensure, Result};
-use nalgebra::Vector3;
+use nalgebra::{Matrix3x1, Vector3};
 use std::io;
 
 fn main() -> Result<()> {
@@ -13,7 +13,7 @@ fn main() -> Result<()> {
     io_util::io_handler(&mut stdin, &mut stdout, logic)
 }
 
-fn logic(input: &str) -> Result<isize> {
+fn logic(input: &str) -> Result<Matrix3x1<isize>> {
     let x = input
         .split_whitespace()
         .take(3)
@@ -31,7 +31,7 @@ fn logic(input: &str) -> Result<isize> {
     ensure!(y.len() == 3, LackOfInputOnParseError);
     let y = Vector3::from_vec(y);
 
-    Ok(x.dot(&y))
+    Ok(x.cross(&y))
 }
 
 #[cfg(test)]
@@ -42,21 +42,16 @@ mod tests {
     use rstest::rstest;
 
     #[rstest]
-    #[case("1 2 3 3 2 1", 10)]
-    fn 正_ベクトルの内積を求める(#[case] input: &str, #[case] expected: isize) {
+    #[case("1 2 3 3 2 1", Vector3::new(-4, 8, -4))]
+    #[case("5 -2 3 4 0 -4", Vector3::new(8, 32, 8))]
+    fn 正_ベクトルの外積を求める(
+        #[case] input: &str,
+        #[case] expected: Matrix3x1<isize>,
+    ) {
         let result = logic(input);
+
         assert!(result.is_ok());
         assert_eq!(result.unwrap(), expected);
-    }
-
-    #[rstest]
-    #[case("1 2 3 4 3 e")]
-    #[case("2 # # 3 3 3")]
-    fn 異_パースに失敗した際はエラーを返す(#[case] input: &str) {
-        let result = logic(input);
-
-        assert!(result.is_err());
-        assert!(result.unwrap_err().is::<std::num::ParseIntError>());
     }
 
     #[rstest]

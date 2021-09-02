@@ -45,7 +45,7 @@ mod tests {
 
     #[test]
     #[allow(non_snake_case)]
-    fn 誤_パースに失敗した際はParseIntErrorを返す() {
+    fn 異_パースに失敗した際はParseIntErrorを返す() {
         use std::num::ParseIntError;
         let result = logic("aa");
 

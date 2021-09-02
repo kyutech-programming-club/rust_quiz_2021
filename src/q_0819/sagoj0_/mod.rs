@@ -68,7 +68,7 @@ mod tests {
 
     #[test]
     #[allow(non_snake_case)]
-    fn 誤_パースに失敗した際はParseIntErrorを返す() {
+    fn 異_パースに失敗した際はParseIntErrorを返す() {
         use std::num::ParseIntError;
         let result = logic("aa");
         assert!(result.is_err());
@@ -82,7 +82,7 @@ mod tests {
     #[allow(non_snake_case)]
     #[case(" ")]
     #[case("1")]
-    fn 誤_入力が足りなければエラーを返す(#[case] input: &str) {
+    fn 異_入力が足りなければエラーを返す(#[case] input: &str) {
         let result = logic(input);
 
         assert!(result.is_err());
@@ -98,7 +98,7 @@ mod tests {
     #[case("1 0")]
     #[case("0 0")]
     #[allow(non_snake_case)]
-    fn 誤_二つ目の入力が0ならエラーを返す(#[case] input: &str) {
+    fn 異_二つ目の入力が0ならエラーを返す(#[case] input: &str) {
         let result = logic(input);
 
         assert!(result.is_err());
