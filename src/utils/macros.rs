@@ -31,6 +31,7 @@ macro_rules! assert_error_match {
 /// ## Example
 /// ```
 /// use rust_quiz_2021::mdo;
+/// use rust_quiz_2021::utils::sagoj0_::monad::option::*;
 ///
 /// let pure = |x| Some(x);
 /// let result = mdo! {
@@ -52,10 +53,10 @@ macro_rules! assert_error_match {
 #[macro_export]
 macro_rules! mdo {
     ($i: ident <= $e:expr , $($t:tt)*) => {
-        $e.and_then(move |$i| mdo!($($t)*))
+        bind($e, (move |$i| mdo!($($t)*)))
     };
     ($e: expr, $($t:tt)*) => {
-        $e.and_then(move |_| mdo!($($t)*))
+        bind($e, (move |_| mdo!($($t)*)))
     };
     (ret $e: expr) => (pure($e));
     ($e: expr) => ($e);
