@@ -1,4 +1,4 @@
-use anyhow::{ensure, Result};
+use anyhow::{anyhow, ensure, Result};
 use crate::utils::tanacchi::parser::parse_from_iter;
 use crate::utils::tanacchi::error::Error as MyError;
 
@@ -11,7 +11,9 @@ fn main(input: &str) -> Result<isize> {
         begin < end,
         MyError::InvalidInputError("The second number must be greater than the first one.")
     );
-    Ok((begin..=end).into_iter().fold(1, |sum, n| sum * n))
+    (begin..=end)
+        .try_fold(1_isize, |sum, n| sum.checked_mul(n))
+        .ok_or(anyhow!(MyError::OverflowError))
 }
 
 #[cfg(test)]
@@ -72,6 +74,20 @@ mod tests {
             MyError::InvalidInputError(
                 "The second number must be greater than the first one."
             )
+        );
+    }
+
+    #[rstest]
+    #[case("1000 1010")]
+    fn raise_for_overflowed_result(#[case] input: &str) {
+        let result = main(&input);
+        assert!(result.is_err());
+
+        let err = result.unwrap_err();
+        assert_error_match!(
+            err,
+            MyError,
+            MyError::OverflowError
         );
     }
 }
