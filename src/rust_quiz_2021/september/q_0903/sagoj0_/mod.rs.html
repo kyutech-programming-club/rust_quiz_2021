@@ -116,18 +116,18 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iter</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">split_whitespace</span>();
     <span class="kw">let</span> <span class="ident">n</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">parse_from_iter</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">iter</span>)<span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> (<span class="number">1</span>..<span class="op">=</span><span class="ident">n</span>)
-        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">power</span>(<span class="ident">i</span> <span class="kw">as</span> <span class="ident">isize</span>, <span class="number">5</span>))
-        .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sum</span>: <span class="ident">isize</span> <span class="op">=</span> <span class="number">0</span>;
-    <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="ident">v</span> {
-        <span class="ident">sum</span> <span class="op">=</span> <span class="ident">sum</span>
-            .<span class="ident">checked_add</span>(<span class="ident">x</span>)
-            .<span class="ident">ok_or</span>(<span class="macro">anyhow!</span>(<span class="ident">OverflowError</span>(<span class="string">&quot;overflow at sum&quot;</span>.<span class="ident">to_owned</span>())))<span class="question-mark">?</span>;
-    }
-
+    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">powering_sum</span>(<span class="ident">n</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="ident">fifth_power_sum_formula</span>(<span class="ident">n</span>)<span class="question-mark">?</span>;
-    <span class="prelude-val">Ok</span>(<span class="ident">sum</span> <span class="op">=</span><span class="op">=</span> <span class="ident">expected</span> <span class="kw">as</span> <span class="ident">isize</span>)
+    <span class="prelude-val">Ok</span>(<span class="ident">result</span> <span class="op">=</span><span class="op">=</span> <span class="ident">expected</span> <span class="kw">as</span> <span class="ident">isize</span>)
+}
+
+<span class="kw">fn</span> <span class="ident">powering_sum</span>(<span class="ident">n</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span> {
+    (<span class="number">1</span>..<span class="op">=</span><span class="ident">n</span>)
+        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">power</span>(<span class="ident">i</span> <span class="kw">as</span> <span class="ident">isize</span>, <span class="number">5</span>))
+        .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
+        .<span class="ident">into_iter</span>()
+        .<span class="ident">try_fold</span>(<span class="number">0_isize</span>, <span class="op">|</span><span class="ident">acc</span>, <span class="ident">x</span><span class="op">|</span> <span class="ident">acc</span>.<span class="ident">checked_add</span>(<span class="ident">x</span>))
+        .<span class="ident">ok_or</span>(<span class="macro">anyhow!</span>(<span class="ident">OverflowError</span>(<span class="string">&quot;overflow at sum&quot;</span>.<span class="ident">to_owned</span>())))
 }
 
 <span class="kw">fn</span> <span class="ident">fifth_power_sum_formula</span>(<span class="ident">n</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
