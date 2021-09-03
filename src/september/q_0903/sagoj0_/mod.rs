@@ -17,18 +17,18 @@ fn logic(input: &str) -> Result<bool> {
     let mut iter = input.split_whitespace();
     let n: usize = parse_from_iter(&mut iter)?;
 
-    let v = (1..=n)
-        .map(|i| power(i as isize, 5))
-        .collect::<Result<Vec<isize>>>()?;
-    let mut sum: isize = 0;
-    for x in v {
-        sum = sum
-            .checked_add(x)
-            .ok_or(anyhow!(OverflowError("overflow at sum".to_owned())))?;
-    }
-
+    let result = powering_sum(n)?;
     let expected = fifth_power_sum_formula(n)?;
-    Ok(sum == expected as isize)
+    Ok(result == expected as isize)
+}
+
+fn powering_sum(n: usize) -> Result<isize> {
+    (1..=n)
+        .map(|i| power(i as isize, 5))
+        .collect::<Result<Vec<isize>>>()?
+        .into_iter()
+        .try_fold(0_isize, |acc, x| acc.checked_add(x))
+        .ok_or(anyhow!(OverflowError("overflow at sum".to_owned())))
 }
 
 fn fifth_power_sum_formula(n: usize) -> Result<usize> {
