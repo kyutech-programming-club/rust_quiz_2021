@@ -1,1 +1,1 @@
-initSidebarItems({"macro":[["assert_error_match","anyhowのエラーをダウンキャストし， 実際のエラー値を検証する． (written by `sagoj0_`)"]],"mod":[["utils","問題回答用の自作ライブラリモジュール． 回答と同様作成者毎にモジュールを分割する．"]]});
+initSidebarItems({"macro":[["assert_error_match","anyhowのエラーをダウンキャストし， 実際のエラー値を検証する． (written by `sagoj0_`)"],["mdo","and_thenメソッドが実装されたmonadに対してdo記法を再現する． 不明点はHaskellのdo記法やScalaのfor-yieldを参照されたし． (written be sagoj0_)"]],"mod":[["utils","問題回答用の自作ライブラリモジュール． 回答と同様作成者毎にモジュールを分割する．"]]});

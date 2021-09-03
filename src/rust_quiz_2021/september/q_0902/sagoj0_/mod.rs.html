@@ -97,7 +97,7 @@
     <span class="ident">power</span>(<span class="ident">n</span>, <span class="ident">m</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">power</span>(<span class="ident">n</span>: <span class="ident">isize</span>, <span class="ident">m</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">power</span>(<span class="ident">n</span>: <span class="ident">isize</span>, <span class="ident">m</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span> {
     <span class="ident">n</span>.<span class="ident">checked_pow</span>(<span class="ident">m</span>)
         .<span class="ident">ok_or</span>(<span class="macro">anyhow!</span>(<span class="ident">QuizSolveError::OverflowError</span>(
             <span class="string">&quot;overflow at power&quot;</span>.<span class="ident">to_owned</span>()
