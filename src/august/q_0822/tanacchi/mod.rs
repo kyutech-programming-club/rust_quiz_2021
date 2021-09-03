@@ -13,6 +13,8 @@ fn main(input: &str) -> Result<isize> {
 mod tests {
     use super::*;
     use rstest::rstest;
+    use std::num::ParseIntError;
+    use crate::utils::tanacchi::error::Error as MyError;
 
     #[rstest]
     #[case("0 10", 55)]
@@ -22,5 +24,30 @@ mod tests {
         let result = main(&input);
         assert!(result.is_ok());
         assert_eq!(result.unwrap(), expected);
+    }
+
+    #[rstest]
+    #[case("10")]
+    #[case("-1")]
+    #[case("-10")]
+    fn raise_when_number_of_inputs_is_not_enough(#[case] input: &str) {
+        let result = main(&input);
+        assert!(result.is_err());
+
+        let err = result.unwrap_err();
+        assert_error_match!(err, MyError, MyError::LackOfInputElemsError);
+    }
+
+    #[rstest]
+    #[case("10 ahi")]
+    #[case("0 3.14")]
+    #[case("poyo 100")]
+    #[case("23.4 50")]
+    fn raise_when_input_cannot_be_parsed_to_int(#[case] input: &str) {
+        let result = main(&input);
+        assert!(result.is_err());
+
+        let err = result.unwrap_err();
+        assert!(err.downcast_ref::<ParseIntError>().is_some());
     }
 }
