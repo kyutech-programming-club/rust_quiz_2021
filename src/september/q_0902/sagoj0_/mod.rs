@@ -20,7 +20,7 @@ fn logic(input: &str) -> Result<isize> {
     power(n, m)
 }
 
-fn power(n: isize, m: u32) -> Result<isize> {
+pub fn power(n: isize, m: u32) -> Result<isize> {
     n.checked_pow(m)
         .ok_or(anyhow!(QuizSolveError::OverflowError(
             "overflow at power".to_owned()
