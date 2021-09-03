@@ -30,22 +30,24 @@ macro_rules! assert_error_match {
 ///
 /// ## Example
 /// ```
+/// use rust_quiz_2021::mdo;
+///
 /// let pure = |x| Some(x);
 /// let result = mdo! {
-///     x <- pure(1), // x: usize == 1
-///     y <- pure(2), // y: usize == 2
-///     z <- pure(3), // z: usize == 3
+///     x <= pure(1), // x: usize == 1
+///     y <= pure(2), // y: usize == 2
+///     z <= pure(3), // z: usize == 3
 ///     pure(x + y + z)
-/// }
+/// };
 /// assert_eq!(result, Some(6));
 /// ```
 ///
 /// パターンにすると<-演算子が使えなくなるため=<<記号にせざるを得ない．
-/// 現状パターンを利用するか不明なため，利用する際に実装を追加する．
+/// 現状パターンを利用するか不明なため，利用する際に以下の実装を追加する．
 /// ```
-/// ($p: pat =<< $e: expr , $( $t: tt )*) => {
-///     $e.and_then(move |$p| mdo! { $( $t )* })
-/// };
+/// //($p: pat =<< $e: expr , $( $t: tt )*) => {
+/// //    $e.and_then(move |$p| mdo! { $( $t )* })
+/// //};
 /// ```
 #[macro_export]
 macro_rules! mdo {
