@@ -35,10 +35,10 @@ fn fifth_power_sum_formula(n: usize) -> Result<usize> {
     use crate::utils::sagoj0_::monad::{Applicative, Monad};
 
     (mdo! {
-        square <= Some(n).and_then(|x| x.checked_pow(2)), // n^2
-        add1_square <= Some(n + 1).bind(|x| x.checked_pow(2)), // (n+1)^2
+        square <= n.checked_pow(2), // n^2
+        add1_square <= (n + 1).checked_pow(2), // (n+1)^2
         //  2n^2 + 2n - 1 => 2n(n+1) - 1
-        n2_nadd1_sub1 <=Option::pure(n).bind(|x| x.checked_mul(2)) // 2n
+        n2_nadd1_sub1 <= n.checked_mul(2) // 2n
                      .bind(|x| x.checked_mul(n+1)) // 2n(n+1)
                      .bind(|x| Some(x-1)), // 2n(n+1)-1
         sq_mul_add1sq <= square.checked_mul(add1_square), // n^2*(n+1)^2
