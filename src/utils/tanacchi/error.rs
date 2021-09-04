@@ -10,4 +10,8 @@ pub enum Error {
     /// 入力が不正のとき（メッセージ付き）
     #[error("number of input elems must be {0}")]
     InvalidInputError(&'static str),
+
+    /// 数値がオーバフローしたときのエラー
+    #[error("overflow occured")]
+    OverflowError,
 }
