@@ -53,11 +53,10 @@ macro_rules! assert_error_match {
 #[macro_export]
 macro_rules! mdo {
     ($i: ident <= $e:expr , $($t:tt)*) => {
-        bind($e, (move |$i| mdo!($($t)*)))
+        ($e).bind(move |$i| mdo!($($t)*))
     };
     ($e: expr, $($t:tt)*) => {
-        bind($e, (move |_| mdo!($($t)*)))
+        ($e).bind(move |_| mdo!($($t)*))
     };
-    (ret $e: expr) => (pure($e));
     ($e: expr) => ($e);
 }
