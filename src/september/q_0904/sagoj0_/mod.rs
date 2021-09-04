@@ -1,11 +1,10 @@
 #![allow(dead_code)]
 
-use anyhow::Result;
-use std::io;
 use crate::utils::sagoj0_::io_util;
 use crate::utils::sagoj0_::parse_util::parse_from_iter;
-use rand::{Rng, thread_rng, RngCore};
-
+use anyhow::Result;
+use rand::{thread_rng, Rng, RngCore};
+use std::io;
 
 fn main() -> Result<()> {
     let mut stdin = io::stdin();
@@ -21,7 +20,7 @@ fn logic(input: &str) -> Result<usize> {
     Ok(my_rand(n))
 }
 
-fn my_rand_interface(n: usize, rng: &mut impl RngCore) -> usize {
+pub fn my_rand_interface(n: usize, rng: &mut impl RngCore) -> usize {
     rng.gen::<usize>() % n
 }
 
@@ -30,14 +29,13 @@ fn my_rand(n: usize) -> usize {
     my_rand_interface(n, &mut rng)
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::utils::sagoj0_::error::QuizSolveError::{self, LackOfInputOnParseError};
     use pretty_assertions::assert_eq;
-    use rstest::rstest;
     use rand::rngs::mock::StepRng;
+    use rstest::rstest;
 
     #[rstest]
     #[case(100, 10, 10)]
@@ -61,4 +59,3 @@ mod tests {
         assert_error_match!(error, QuizSolveError, LackOfInputOnParseError);
     }
 }
-
