@@ -1,4 +1,4 @@
-use super::kind1::Kind1;
+use super::kind::Kind1;
 
 pub mod option;
 pub mod result;

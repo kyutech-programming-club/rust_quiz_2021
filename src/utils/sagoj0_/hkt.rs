@@ -1,6 +1,6 @@
 pub mod applicative;
 pub mod functor;
-mod kind1;
+mod kind;
 pub mod monad;
 
 pub use applicative::Applicative;
