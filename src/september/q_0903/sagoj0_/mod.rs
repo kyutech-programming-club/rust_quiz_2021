@@ -32,7 +32,7 @@ fn powering_sum(n: usize) -> Result<isize> {
 }
 
 fn fifth_power_sum_formula(n: usize) -> Result<usize> {
-    use crate::utils::sagoj0_::monad::{Applicative, Monad};
+    use crate::utils::sagoj0_::hkt::{Applicative, Monad};
 
     (mdo! {
         square <= n.checked_pow(2), // n^2
