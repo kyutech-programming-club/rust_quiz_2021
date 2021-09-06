@@ -1,5 +1,6 @@
 use super::kind::Kind1;
 
+pub mod func;
 pub mod option;
 pub mod result;
 
