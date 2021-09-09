@@ -1,7 +1,7 @@
 //! 入出力に関連するユーティリティを提供する.
 
 use anyhow::Result;
-use std::fmt::Display;
+use std::fmt::Debug;
 use std::io::{Read, Write};
 
 /// srcに対しlogicを適用したうえでその結果をdstに書き込む.
@@ -12,14 +12,14 @@ use std::io::{Read, Write};
 pub fn io_handler<F, T>(src: &mut impl Read, dst: &mut impl Write, logic: F) -> Result<()>
 where
     F: FnOnce(&str) -> Result<T>,
-    T: Display,
+    T: Debug,
 {
     let mut buf = String::new();
     src.read_to_string(&mut buf)?;
 
     let logic_result = logic(&buf)?;
 
-    writeln!(dst, "{}", logic_result)?;
+    writeln!(dst, "{:?}", logic_result)?;
     Ok(())
 }
 
