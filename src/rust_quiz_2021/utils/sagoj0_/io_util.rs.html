@@ -104,7 +104,7 @@
 <span class="doccomment">//! 入出力に関連するユーティリティを提供する.</span>
 
 <span class="kw">use</span> <span class="ident">anyhow::Result</span>;
-<span class="kw">use</span> <span class="ident">std::fmt::Display</span>;
+<span class="kw">use</span> <span class="ident">std::fmt::Debug</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">Read</span>, <span class="ident">Write</span>};
 
 <span class="doccomment">/// srcに対しlogicを適用したうえでその結果をdstに書き込む.</span>
@@ -115,14 +115,14 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">io_handler</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">Read</span>, <span class="ident">dst</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">Write</span>, <span class="ident">logic</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
-    <span class="ident">T</span>: <span class="ident">Display</span>,
+    <span class="ident">T</span>: <span class="ident">Debug</span>,
 {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">String::new</span>();
     <span class="ident">src</span>.<span class="ident">read_to_string</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="ident">logic_result</span> <span class="op">=</span> <span class="ident">logic</span>(<span class="kw-2">&amp;</span><span class="ident">buf</span>)<span class="question-mark">?</span>;
 
-    <span class="macro">writeln!</span>(<span class="ident">dst</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">logic_result</span>)<span class="question-mark">?</span>;
+    <span class="macro">writeln!</span>(<span class="ident">dst</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">logic_result</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }
 
