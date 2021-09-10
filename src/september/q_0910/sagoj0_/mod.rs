@@ -19,10 +19,9 @@ fn logic(input: &str) -> Result<isize> {
     let d: isize = parse_from_iter(&mut input)?;
 
     (0..=a)
-        .filter(|i| a <= ((c * d) - b) * i)
-        .next()
+        .find(|i| a <= ((c * d) - b) * i)
         .or(Some(-1))
-        .ok_or(anyhow!("unreachable"))
+        .ok_or_else(|| anyhow!("unreachable"))
 }
 
 #[cfg(test)]
