@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 use crate::utils::sagoj0_::io_util::io_handler;
-use crate::utils::sagoj0_::parse_util::{parse_from_iter, parse_to_vec};
-use anyhow::Result;
+use crate::utils::sagoj0_::parse_util::parse_from_iter;
+use anyhow::{anyhow, Result};
 use std::io;
 
 fn main() -> Result<()> {
@@ -11,14 +11,17 @@ fn main() -> Result<()> {
     io_handler(&mut stdin, &mut stdout, logic)
 }
 
-fn logic(input: &str) -> Result<usize> {
+fn logic(input: &str) -> Result<isize> {
     let mut input = input.split_whitespace();
-    let h: usize = parse_from_iter(&mut input)?;
-    let w: usize = parse_from_iter(&mut input)?;
+    let a: isize = parse_from_iter(&mut input)?;
+    let b: isize = parse_from_iter(&mut input)?;
+    let c: isize = parse_from_iter(&mut input)?;
+    let d: isize = parse_from_iter(&mut input)?;
 
-    let a: Vec<usize> = parse_to_vec(&mut input, h * w)?;
-    let &min = a.iter().min().unwrap();
-    Ok(a.into_iter().map(|x| x - min).sum())
+    (0..=a)
+        .find(|i| a <= ((c * d) - b) * i)
+        .or(Some(-1))
+        .ok_or_else(|| anyhow!("unreachable"))
 }
 
 #[cfg(test)]
@@ -28,12 +31,11 @@ mod tests {
     use rstest::rstest;
 
     #[rstest]
-    #[case("2 3 2 2 3 3 2 2", 2)]
-    #[case("3 3 99 99 99 99 0 99 99 99 99", 792)]
-    #[case("3 2 4 4 4 4 4 4", 0)]
+    #[case("5 2 3 2", 2)]
+    #[case("6 9 2 3", -1)]
     fn 正_atcoderの入出力例において成功する(
         #[case] input: &str,
-        #[case] expected: usize,
+        #[case] expected: isize,
     ) {
         let result = logic(input);
 
