@@ -1,7 +1,7 @@
-use super::Kind1;
+use super::Kind;
 use anyhow::Result;
 
-impl<T> Kind1 for Result<T> {
+impl<T> Kind for Result<T> {
     type Inner = T;
     type Lifted<U> = Result<U>;
 }
