@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["parse_from_iter","&strのイテレータを受け取り，それを消費して任意の値にパースする．"],["parse_to_vec","指定した長さ`len`分だけイテレータを消費し その長さのvecを返す"],["try_parse","parseを行うもしくはparseが行えるかどうか判定を行う． 空入力の際にLackOfInputOnParseErrorを返却する他， 各Parse時のエラーも適宜返却する．"]]});
+initSidebarItems({"fn":[["parse_from_iter","&strのイテレータを受け取り，それを消費して任意の値にパースする．"],["parse_to_tuple_vec",""],["parse_to_vec","指定した長さ`len`分だけイテレータを消費し その長さのvecを返す"],["try_parse","parseを行うもしくはparseが行えるかどうか判定を行う． 空入力の際にLackOfInputOnParseErrorを返却する他， 各Parse時のエラーも適宜返却する．"]]});
