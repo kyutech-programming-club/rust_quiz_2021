@@ -44,3 +44,23 @@ where
         .map(|_| parse_from_iter(iter))
         .collect::<Result<Vec<T>>>()
 }
+
+///
+pub fn parse_to_tuple_vec<'a, T, U, I>(iter: &mut I, len: usize) -> Result<Vec<(T, U)>>
+where
+    T: FromStr,
+    U: FromStr,
+
+    <T as FromStr>::Err: Sync + Send + error::Error + 'static,
+    <U as FromStr>::Err: Sync + Send + error::Error + 'static,
+    I: Iterator<Item = &'a str>,
+{
+    (0..len)
+        .map(|_| (parse_from_iter(iter), parse_from_iter(iter)))
+        .map(|(x, y): (Result<T>, Result<U>)| match (x, y) {
+            (Ok(x), Ok(y)) => Ok((x, y)),
+            (Err(ve), _) => Err(ve),
+            (_, Err(pe)) => Err(pe),
+        })
+        .collect::<Result<Vec<(T, U)>>>()
+}
