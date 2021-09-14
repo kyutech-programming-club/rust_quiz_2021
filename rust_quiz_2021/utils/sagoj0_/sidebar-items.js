@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["error","rust_quizの実装で用いるエラーを定義する. enumの列挙子は適宜追加する."],["io_util","入出力に関連するユーティリティを提供する."],["monad",""],["parse_util","文字列のパースに関するユーティリティを提供する．"]]});
+initSidebarItems({"mod":[["error","rust_quizの実装で用いるエラーを定義する. enumの列挙子は適宜追加する."],["hkt",""],["io_util","入出力に関連するユーティリティを提供する."],["parse_util","文字列のパースに関するユーティリティを提供する．"]]});

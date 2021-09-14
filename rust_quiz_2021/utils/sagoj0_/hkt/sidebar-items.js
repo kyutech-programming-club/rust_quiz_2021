@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["applicative",""],["functor",""],["monad",""]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["option",""],["result",""]],"trait":[["Functor","変換処理を一般的に扱うためのトレイト"]]});
