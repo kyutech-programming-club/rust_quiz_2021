@@ -32,7 +32,7 @@ macro_rules! assert_error_match {
 /// ## Example
 /// ```
 /// use rust_quiz_2021::mdo;
-/// use rust_quiz_2021::utils::sagoj0_::monad::*;
+/// use rust_quiz_2021::utils::sagoj0_::hkt::*;
 ///
 /// let result = mdo! {
 ///     x <= Option::pure(1), // x: usize == 1
