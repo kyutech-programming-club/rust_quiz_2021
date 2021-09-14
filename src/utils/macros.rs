@@ -7,6 +7,7 @@
 ///
 /// ## Example
 /// ```
+/// use rust_quiz_2021::utils::sagoj0_::error::QuizSolveError::LackOfInputOnParseError;
 /// #[test]
 /// fn should_error_when_parse() {
 ///     let result = Err(LackOfInputOnParseError);
@@ -31,21 +32,20 @@ macro_rules! assert_error_match {
 /// ## Example
 /// ```
 /// use rust_quiz_2021::mdo;
-/// use rust_quiz_2021::utils::sagoj0_::monad::option::*;
+/// use rust_quiz_2021::utils::sagoj0_::hkt::*;
 ///
-/// let pure = |x| Some(x);
 /// let result = mdo! {
-///     x <= pure(1), // x: usize == 1
-///     y <= pure(2), // y: usize == 2
-///     z <= pure(3), // z: usize == 3
-///     pure(x + y + z)
+///     x <= Option::pure(1), // x: usize == 1
+///     y <= Option::pure(2), // y: usize == 2
+///     z <= Option::pure(3), // z: usize == 3
+///     Option::pure(x + y + z)
 /// };
 /// assert_eq!(result, Some(6));
 /// ```
 ///
-/// パターンにすると<-演算子が使えなくなるため=<<記号にせざるを得ない．
+/// パターンにすると<=演算子が使えなくなるため=<<記号にせざるを得ない．
 /// 現状パターンを利用するか不明なため，利用する際に以下の実装を追加する．
-/// ```
+/// ```text
 /// //($p: pat =<< $e: expr , $( $t: tt )*) => {
 /// //    $e.and_then(move |$p| mdo! { $( $t )* })
 /// //};
@@ -53,11 +53,10 @@ macro_rules! assert_error_match {
 #[macro_export]
 macro_rules! mdo {
     ($i: ident <= $e:expr , $($t:tt)*) => {
-        bind($e, (move |$i| mdo!($($t)*)))
+        ($e).bind(move |$i| mdo!($($t)*))
     };
     ($e: expr, $($t:tt)*) => {
-        bind($e, (move |_| mdo!($($t)*)))
+        ($e).bind(move |_| mdo!($($t)*))
     };
-    (ret $e: expr) => (pure($e));
     ($e: expr) => ($e);
 }

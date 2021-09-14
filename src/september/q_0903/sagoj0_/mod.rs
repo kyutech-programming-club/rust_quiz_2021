@@ -32,18 +32,19 @@ fn powering_sum(n: usize) -> Result<isize> {
 }
 
 fn fifth_power_sum_formula(n: usize) -> Result<usize> {
-    use crate::utils::sagoj0_::monad::option::*;
+    use crate::utils::sagoj0_::hkt::{Applicative, Monad};
+
     (mdo! {
-        square <= pure(n).and_then(|x| x.checked_pow(2)), // n^2
-        add1_square <= pure(n + 1).and_then(|x| x.checked_pow(2)), // (n+1)^2
+        square <= n.checked_pow(2), // n^2
+        add1_square <= (n + 1).checked_pow(2), // (n+1)^2
         //  2n^2 + 2n - 1 => 2n(n+1) - 1
-        n2_nadd1_sub1 <= pure(n).and_then(|x| x.checked_mul(2)) // 2n
-                     .and_then(|x| x.checked_mul(n+1)) // 2n(n+1)
-                     .and_then(|x| pure(x-1)), // 2n(n+1)-1
+        n2_nadd1_sub1 <= n.checked_mul(2) // 2n
+                     .bind(|x| x.checked_mul(n+1)) // 2n(n+1)
+                     .bind(|x| Some(x-1)), // 2n(n+1)-1
         sq_mul_add1sq <= square.checked_mul(add1_square), // n^2*(n+1)^2
         // n^2*(n+1)^2は4の倍数
         res <= n2_nadd1_sub1.checked_mul(sq_mul_add1sq / 4), // n^2*(n+1)^2/4*2n(n+1)-1
-        ret (res / 3)
+        Option::pure(res / 3)
     })
     .ok_or(anyhow!(OverflowError("overflow at formula".to_owned())))
 }
