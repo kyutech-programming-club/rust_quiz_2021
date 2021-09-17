@@ -20,7 +20,7 @@ fn logic(input: &str) -> Result<usize> {
     (0..n)
         .map(|i| a[i + 1] - a[i])
         .max()
-        .ok_or(anyhow!("unreachable"))
+        .ok_or_else(|| anyhow!("unreachable"))
 }
 
 #[cfg(test)]
